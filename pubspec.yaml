@@ -9,6 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  lottie: ^3.3.2
 
 dev_dependencies:
   flutter_test:
@@ -16,4 +17,7 @@ dev_dependencies:
   flutter_lints: ^5.0.0
 
 flutter:
-  uses-material-design: true
+  uses-material-design: false
+  
+  assets:
+    - lib/assets/tyre.json
