@@ -3,6 +3,11 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
+// neeed this for timer function
+import 'dart:async';
+
+import 'package:nfs_alloy/pages/main_page.dart';
+
 class Loading extends StatefulWidget{
   const Loading({super.key});
 
@@ -20,16 +25,38 @@ class LoadingState extends State<Loading>{
   // text styles
   late TextStyle Loadstyle = TextStyle(color: Color.fromARGB(255, 255, 255, 255), fontSize: load, fontStyle: FontStyle.italic);
   late TextStyle adviceStyle = TextStyle(color: Color.fromARGB(255, 255, 255, 255), fontSize: advice, fontStyle: FontStyle.italic);
+  
 
   @override
   void initState() {
     super.initState();
 
+    // load the asset from library
     _composition = AssetLottie('lib/assets/tyre.json').load();
+
+    // start a timer
+    startTimer();
+  }
+
+  void startTimer(){
+    // a custom timer function to wait for 3 seconds and push the screen from this loading to main_page
+
+    Timer(Duration(seconds: 3), (){
+      // push the screen into the new page
+      Navigator.pushReplacement(
+        context, 
+        MaterialPageRoute(
+          builder: (context) => MainPage()
+        )
+      );
+    }
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    print(DateTime.now());
+
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 218, 218, 218),
       body: Center(
