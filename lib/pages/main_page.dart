@@ -1,5 +1,6 @@
 // the main-page which just holds an empty wallpaper and the functions to load the other screens
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:nfs_alloy/pages/about.dart';
 import 'package:nfs_alloy/pages/empty.dart';
@@ -13,7 +14,7 @@ class MainPage extends StatefulWidget {
 }
 
 class MainPageState extends State<MainPage> {
-  PageController pageController = new PageController();
+  PageController pageController = PageController();
   bool hoverbtn1 = false, hoverbtn2 = false, hoverbtn3 = false;
 
   @override
@@ -98,7 +99,9 @@ class MainPageState extends State<MainPage> {
             buttonID = value;
             dumbBoolChanger(value, whichButton);
           });
-          print("$option, value = $buttonID");
+          if (kDebugMode) {
+            print("$option, value = $buttonID");
+          }
         },
         style: ButtonStyle(
           overlayColor: WidgetStatePropertyAll(Colors.transparent),

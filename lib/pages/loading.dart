@@ -23,7 +23,7 @@ class LoadingState extends State<Loading>{
   double load = 80, advice = 22;
   
   // text styles
-  late TextStyle Loadstyle = TextStyle(color: Color.fromARGB(255, 255, 255, 255), fontSize: load, fontStyle: FontStyle.italic);
+  late TextStyle loadstyle = TextStyle(color: Color.fromARGB(255, 255, 255, 255), fontSize: load, fontStyle: FontStyle.italic);
   late TextStyle adviceStyle = TextStyle(color: Color.fromARGB(255, 255, 255, 255), fontSize: advice, fontStyle: FontStyle.italic);
   
 
@@ -36,6 +36,11 @@ class LoadingState extends State<Loading>{
 
     // start a timer
     startTimer();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   void startTimer(){
@@ -55,7 +60,6 @@ class LoadingState extends State<Loading>{
 
   @override
   Widget build(BuildContext context) {
-    print(DateTime.now());
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 218, 218, 218),
@@ -64,7 +68,7 @@ class LoadingState extends State<Loading>{
           mainAxisSize: MainAxisSize.min,
           children: [
             // loading TXT
-            Text("Loading...", style: Loadstyle,),
+            Text("Loading...", style: loadstyle,),
 
             // Lottie anim
             SizedBox(
