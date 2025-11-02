@@ -5,8 +5,16 @@ import 'package:nfs_alloy/pages/about.dart';
 import 'package:nfs_alloy/pages/empty.dart';
 import 'package:nfs_alloy/pages/wallpapers.dart';
 
-class MainPage extends StatelessWidget {
+class MainPage extends StatefulWidget {
+  const MainPage({super.key});
+
+  @override
+  MainPageState createState() => MainPageState();
+}
+
+class MainPageState extends State<MainPage> {
   PageController pageController = new PageController();
+  bool hoverbtn1 = false, hoverbtn2 = false, hoverbtn3 = false;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +47,7 @@ class MainPage extends StatelessWidget {
 
           // row of pages in bottom left
           Positioned(
-            left: MediaQuery.sizeOf(context).width * 0.5 - 300 ,
+            left: MediaQuery.sizeOf(context).width * 0.5 - 300,
             bottom: MediaQuery.sizeOf(context).height * 0.04,
             child: Stack(
               alignment: AlignmentGeometry.center,
@@ -53,42 +61,17 @@ class MainPage extends StatelessWidget {
 
                 // menu
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     // home page button
-                    TextButton(
-                      onPressed: () {
-                        pageController.animateToPage(
-                          0,
-                          duration: const Duration(milliseconds: 500),
-                          curve: Curves.linear,
-                        );
-                      },
-                      child: Text('HOME'),
-                    ),
+                    menuButton(0, 'HOME', hoverbtn1, 0),
 
                     // wallpaper page button
-                    TextButton(
-                      onPressed: () {
-                        pageController.animateToPage(
-                          1,
-                          duration: const Duration(milliseconds: 500),
-                          curve: Curves.linear,
-                        );
-                      },
-                      child: Text('WALLPAPERs'),
-                    ),
+                    menuButton(1, 'WALLPAPERS', hoverbtn2, 1),
 
                     // about page button
-                    TextButton(
-                      onPressed: () {
-                        pageController.animateToPage(
-                          2,
-                          duration: const Duration(milliseconds: 500),
-                          curve: Curves.linear,
-                        );
-                      },
-                      child: Text('ABOUT'),
-                    ),
+                    menuButton(2, 'ABOUT', hoverbtn3, 2),
                   ],
                 ),
               ],
@@ -97,5 +80,44 @@ class MainPage extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget menuButton(int page, String option, bool buttonID, int whichButton) {
+    return Padding(
+      padding: EdgeInsetsGeometry.symmetric(horizontal: 25, vertical: 0),
+      child: TextButton(
+        onPressed: () {
+          pageController.animateToPage(
+            page,
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.linear,
+          );
+        },
+        onHover: (bool value) {
+          setState(() {
+            buttonID = value;
+            dumbBoolChanger(value, whichButton);
+          });
+          print("$option, value = $buttonID");
+        },
+        style: ButtonStyle(
+          overlayColor: WidgetStatePropertyAll(Colors.transparent),
+          splashFactory: NoSplash.splashFactory,
+        ),
+        child: AnimatedDefaultTextStyle(
+          style: TextStyle(color: buttonID ? Colors.blue : Colors.black),
+          duration: const Duration(milliseconds: 300),
+          child: Text(option, style: TextStyle(fontStyle: FontStyle.italic),),
+        ),
+      ),
+    );
+  }
+
+  void dumbBoolChanger(bool value, int button){
+    switch(button){
+      case 0: hoverbtn1 = value;
+      case 1: hoverbtn2 = value;
+      case 2: hoverbtn3 = value;
+    }
   }
 }
