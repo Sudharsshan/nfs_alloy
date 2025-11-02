@@ -22,3 +22,4 @@ flutter:
   assets:
     - lib/assets/tyre.json
     - lib/assets/nissinneon.png
+    - lib/assets/brushstroke.png
