@@ -4,7 +4,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'dart:async';
-import 'package:nfs_alloy/models/wallpaperLoader.dart';
+import 'package:nfs_alloy/models/wallpaper_loader.dart';
 
 class SanityService {
   static const String projectID = "f624xxvx";

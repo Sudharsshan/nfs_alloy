@@ -4,11 +4,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 //import 'package:nfs_alloy/misllaneous/water_rise_animator.dart';
-import 'package:nfs_alloy/models/wallpaperLoader.dart';
+import 'package:nfs_alloy/models/wallpaper_loader.dart';
 import 'package:nfs_alloy/misllaneous/sanity_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'dart:ui' as ui;
+import 'package:nfs_alloy/widgets/image_pop_up.dart';
+
 
 class Wallpapers extends StatefulWidget {
   const Wallpapers({super.key});
@@ -92,7 +93,7 @@ class WallpaperState extends State<Wallpapers> {
 
                   return GestureDetector(
                     onTap: () {
-                      imagePopUp(context, img, heroTag);
+                      ImagePopUp(context: context,img:  img,heroTag:  heroTag).imagePopUp();
                     },
                     child: Hero(tag: heroTag, child: imageBox(img)),
                   );
@@ -123,99 +124,7 @@ class WallpaperState extends State<Wallpapers> {
       placeholder: (context, url) =>
           Center(child: CircularProgressIndicator.adaptive(strokeWidth: 2.0)),
     );
-
-    //     Padding(
-    //   padding: const EdgeInsets.all(8.0),
-    //   child: Text(
-    //     img.title,
-    //     style: TextStyle(fontWeight: FontWeight.bold),
-    //     maxLines: 1,
-    //     overflow: TextOverflow.ellipsis,
-    //   ),
-    // ),
   }
 
-  void imagePopUp(BuildContext context, Wallpaperloader img, String heroTag) {
-
-    final String imgUrl = img.imageUrl;
-    final String name = img.title;
-    final String description = img.description;
-    showGeneralDialog(
-      context: context,
-      barrierDismissible: true,
-      barrierLabel: 'Close',
-      transitionDuration: const Duration(milliseconds: 300),
-
-      // barrierColor: Colors.black,
-
-      // transitionBuilder: (context, animation, secondaryAnimation, child) {
-      //   return ScaleTransition(scale: CurvedAnimation(parent: animation, curve: Curves.decelerate, reverseCurve: Curves.decelerate), child: child,);
-      // },
-      pageBuilder: (context, animation, secondaryAnimation) {
-        return GestureDetector(
-          onTap: () => Navigator.pop(context),
-          child: BackdropFilter(
-            filter: ui.ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-            child: Material(
-              color: Colors.transparent,
-              child: Row(
-                children: [
-                  // Image pop-up
-                  Hero(
-                    tag: heroTag, // The *same* tag from the grid
-                    child: Padding(
-                      padding: EdgeInsets.all(32),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(3),
-                        child: CachedNetworkImage(
-                          // We use the FULL-RESOLUTION URL here
-                          imageUrl: imgUrl,
-                          width: MediaQuery.widthOf(context) * 0.6,
-
-                          // Show a spinner while the *full-res* image downloads
-                          placeholder: (context, url) => Center(
-                            child: CircularProgressIndicator.adaptive(),
-                          ),
-                          errorWidget: (context, url, error) =>
-                              Icon(Icons.error),
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  // Name and description of the image
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // Name
-                      Text(
-                        name,
-                        style: GoogleFonts.alata(
-                          fontSize: 45,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          decoration: TextDecoration.none,
-                        ),
-                      ),
-
-                      // Description
-                      Text(
-                        description,
-                        style: GoogleFonts.aladin(
-                          fontSize: 30,
-                          fontWeight: FontWeight.w200,
-                          color: Colors.grey,
-                          decoration: TextDecoration.none,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
+  
 }
