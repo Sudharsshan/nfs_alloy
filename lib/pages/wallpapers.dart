@@ -147,43 +147,69 @@ class WallpaperState extends State<Wallpapers> {
       // transitionBuilder: (context, animation, secondaryAnimation, child) {
       //   return ScaleTransition(scale: CurvedAnimation(parent: animation, curve: Curves.decelerate, reverseCurve: Curves.decelerate), child: child,);
       // },
-
       pageBuilder: (context, animation, secondaryAnimation) {
-        return Row(
-          children: [
-            // Image pop-up
-            Hero(
-            tag: heroTag, // The *same* tag from the grid
-            child: Padding(
-              padding: EdgeInsets.all(32),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(3),
-                child: CachedNetworkImage(
-                  // We use the FULL-RESOLUTION URL here
-                  imageUrl: imgUrl,
-                  width: MediaQuery.widthOf(context) * 0.6,
+        return GestureDetector(
+          onTap: () => Navigator.pop(context),
+          child: BackdropFilter(
+            filter: ui.ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+            child: Material(
+              color: Colors.transparent,
+              child: Row(
+                children: [
+                  // Image pop-up
+                  Hero(
+                    tag: heroTag, // The *same* tag from the grid
+                    child: Padding(
+                      padding: EdgeInsets.all(32),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(3),
+                        child: CachedNetworkImage(
+                          // We use the FULL-RESOLUTION URL here
+                          imageUrl: imgUrl,
+                          width: MediaQuery.widthOf(context) * 0.6,
 
-                  // Show a spinner while the *full-res* image downloads
-                  placeholder: (context, url) =>
-                      Center(child: CircularProgressIndicator.adaptive(),),
-                  errorWidget: (context, url, error) => Icon(Icons.error),
-                ),
+                          // Show a spinner while the *full-res* image downloads
+                          placeholder: (context, url) => Center(
+                            child: CircularProgressIndicator.adaptive(),
+                          ),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error),
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  // Name and description of the image
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // Name
+                      Text(
+                        'IMAGE',
+                        style: GoogleFonts.alata(
+                          fontSize: 45,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          decoration: TextDecoration.none,
+                        ),
+                      ),
+
+                      // Description
+                      Text(
+                        'DESCRIPTION',
+                        style: GoogleFonts.aladin(
+                          fontSize: 30,
+                          fontWeight: FontWeight.w200,
+                          color: Colors.grey,
+                          decoration: TextDecoration.none,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
           ),
-
-          // Name and description of the image
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Name
-              Text('IMAGE', style: GoogleFonts.alata(fontSize: 45, fontWeight: FontWeight.bold, color: Colors.white, decoration: TextDecoration.none),),
-
-              // Description
-              Text('DESCRIPTION', style: GoogleFonts.aladin(fontSize: 30, fontWeight: FontWeight.w200, color: Colors.grey, decoration: TextDecoration.none),),
-            ],
-          )
-          ]
         );
       },
     );
