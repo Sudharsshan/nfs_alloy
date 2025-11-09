@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nfs_alloy/pages/loading.dart';
+import 'package:nfs_alloy/pages/main_page.dart';
 
 void main() {
   runApp(const MainApp());
@@ -13,7 +13,7 @@ class MainApp extends StatelessWidget {
 
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Loading(),
+      home: MainPage(),
     );
   }
 }

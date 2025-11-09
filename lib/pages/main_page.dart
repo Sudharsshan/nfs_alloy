@@ -3,7 +3,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:nfs_alloy/pages/about.dart';
-import 'package:nfs_alloy/pages/empty.dart';
+//import 'package:nfs_alloy/pages/empty.dart';
 import 'package:nfs_alloy/pages/wallpapers.dart';
 
 class MainPage extends StatefulWidget {
@@ -20,66 +20,29 @@ class MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 218, 218, 218),
-      body: Stack(
-        children: [
-          // wallpaper
-          Image(
-            image: AssetImage('lib/assets/nissinneon.png'),
-            width: MediaQuery.sizeOf(context).width,
-            height: MediaQuery.sizeOf(context).height,
-            fit: BoxFit.fill,
-          ),
+      appBar: AppBar(
+        backgroundColor:  const Color.fromARGB(255, 226, 226, 226),
+        actions: [
+          // home page button
+          //menuButton(0, 'HOME', hoverbtn1, 0),
 
-          // page view for different pages
-          PageView(
-            controller: pageController,
-            children: [
-              // first page = home page  = empty page
-              Empty(),
+          // wallpaper page button
+          menuButton(0, 'WALLPAPERS', hoverbtn2, 0),
 
-              // wallpaper page
-              Wallpapers(),
-
-              // about me page
-              About(),
-            ],
-          ),
-
-          // row of pages in bottom left
-          Positioned(
-            left: MediaQuery.sizeOf(context).width * 0.5 - 300,
-            bottom: MediaQuery.sizeOf(context).height * 0.04,
-            child: Stack(
-              alignment: AlignmentGeometry.center,
-              children: [
-                // background stroke
-                Image(
-                  image: AssetImage('lib/assets/brushstroke.png'),
-                  width: 600,
-                  height: 100,
-                ),
-
-                // menu
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // home page button
-                    menuButton(0, 'HOME', hoverbtn1, 0),
-
-                    // wallpaper page button
-                    menuButton(1, 'WALLPAPERS', hoverbtn2, 1),
-
-                    // about page button
-                    menuButton(2, 'ABOUT', hoverbtn3, 2),
-                  ],
-                ),
-              ],
-            ),
-          ),
+          // about page button
+          menuButton(1, 'ABOUT', hoverbtn3, 1),
         ],
       ),
+      backgroundColor: const Color.fromARGB(255, 247, 247, 247),
+      body: PageView(
+        controller: pageController,
+        children: [
+
+          Wallpapers(),
+
+          About(),
+        ],
+      )
     );
   }
 
@@ -90,7 +53,7 @@ class MainPageState extends State<MainPage> {
         onPressed: () {
           pageController.animateToPage(
             page,
-            duration: const Duration(milliseconds: 500),
+            duration: const Duration(milliseconds: 250),
             curve: Curves.linear,
           );
         },
@@ -108,19 +71,22 @@ class MainPageState extends State<MainPage> {
           splashFactory: NoSplash.splashFactory,
         ),
         child: AnimatedDefaultTextStyle(
-          style: TextStyle(color: buttonID ? Colors.blue : Colors.black),
+          style: TextStyle(color: buttonID ? const Color.fromARGB(255, 33, 82, 243) : const Color.fromARGB(255, 0, 0, 0)),
           duration: const Duration(milliseconds: 300),
-          child: Text(option, style: TextStyle(fontStyle: FontStyle.italic),),
+          child: Text(option),
         ),
       ),
     );
   }
 
-  void dumbBoolChanger(bool value, int button){
-    switch(button){
-      case 0: hoverbtn1 = value;
-      case 1: hoverbtn2 = value;
-      case 2: hoverbtn3 = value;
+  void dumbBoolChanger(bool value, int button) {
+    switch (button) {
+      // case 0:
+      //   hoverbtn1 = value;
+      case 0:
+        hoverbtn2 = value;
+      case 1:
+        hoverbtn3 = value;
     }
   }
 }
