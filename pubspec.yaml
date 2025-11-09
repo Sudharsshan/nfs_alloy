@@ -7,8 +7,11 @@ environment:
   sdk: ^3.9.2
 
 dependencies:
+  cached_network_image: ^3.4.1
   flutter:
     sdk: flutter
+  flutter_staggered_grid_view: ^0.7.0
+  google_fonts: ^6.3.2
   http: ^1.5.0
   lottie: ^3.3.2
 

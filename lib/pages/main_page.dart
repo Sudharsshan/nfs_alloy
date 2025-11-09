@@ -21,7 +21,8 @@ class MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor:  const Color.fromARGB(255, 226, 226, 226),
+        backgroundColor:  const Color.fromARGB(255, 255, 255, 255),
+        elevation: 0.0,
         actions: [
           // home page button
           //menuButton(0, 'HOME', hoverbtn1, 0),
@@ -33,7 +34,7 @@ class MainPageState extends State<MainPage> {
           menuButton(1, 'ABOUT', hoverbtn3, 1),
         ],
       ),
-      backgroundColor: const Color.fromARGB(255, 247, 247, 247),
+      backgroundColor: const Color.fromARGB(255, 245,245,247),
       body: PageView(
         controller: pageController,
         children: [
