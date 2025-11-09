@@ -92,7 +92,7 @@ class WallpaperState extends State<Wallpapers> {
 
                   return GestureDetector(
                     onTap: () {
-                      imagePopUp(context, img.imageUrl, heroTag);
+                      imagePopUp(context, img, heroTag);
                     },
                     child: Hero(tag: heroTag, child: imageBox(img)),
                   );
@@ -135,7 +135,11 @@ class WallpaperState extends State<Wallpapers> {
     // ),
   }
 
-  void imagePopUp(BuildContext context, String imgUrl, String heroTag) {
+  void imagePopUp(BuildContext context, Wallpaperloader img, String heroTag) {
+
+    final String imgUrl = img.imageUrl;
+    final String name = img.title;
+    final String description = img.description;
     showGeneralDialog(
       context: context,
       barrierDismissible: true,
@@ -185,7 +189,7 @@ class WallpaperState extends State<Wallpapers> {
                     children: [
                       // Name
                       Text(
-                        'IMAGE',
+                        name,
                         style: GoogleFonts.alata(
                           fontSize: 45,
                           fontWeight: FontWeight.bold,
@@ -196,7 +200,7 @@ class WallpaperState extends State<Wallpapers> {
 
                       // Description
                       Text(
-                        'DESCRIPTION',
+                        description,
                         style: GoogleFonts.aladin(
                           fontSize: 30,
                           fontWeight: FontWeight.w200,

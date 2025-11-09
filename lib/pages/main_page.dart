@@ -15,13 +15,17 @@ class MainPage extends StatefulWidget {
 
 class MainPageState extends State<MainPage> {
   PageController pageController = PageController();
-  bool hoverbtn1 = false, hoverbtn2 = false, hoverbtn3 = false;
+  bool hoverbtn1 = false,
+      hoverbtn2 = false,
+      hoverbtn3 = false,
+      activeBtn = false;
+  int currentPage = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor:  const Color.fromARGB(255, 255, 255, 255),
+        backgroundColor: const Color.fromARGB(255, 245, 245, 247),
         elevation: 0.0,
         actions: [
           // home page button
@@ -34,24 +38,25 @@ class MainPageState extends State<MainPage> {
           menuButton(1, 'ABOUT', hoverbtn3, 1),
         ],
       ),
-      backgroundColor: const Color.fromARGB(255, 245,245,247),
+      backgroundColor: const Color.fromARGB(255, 245, 245, 247),
       body: PageView(
         controller: pageController,
-        children: [
-
-          Wallpapers(),
-
-          About(),
-        ],
-      )
+        children: [Wallpapers(), About()],
+      ),
     );
   }
 
   Widget menuButton(int page, String option, bool buttonID, int whichButton) {
+    Color buttonColor = buttonID
+        ? const Color.fromARGB(255, 33, 82, 243)
+        : ((page == currentPage)
+              ? const Color.fromARGB(255, 255, 0, 0)
+              : const Color.fromARGB(255, 0, 0, 0));
     return Padding(
       padding: EdgeInsetsGeometry.symmetric(horizontal: 25, vertical: 0),
       child: TextButton(
         onPressed: () {
+          currentPage = page;
           pageController.animateToPage(
             page,
             duration: const Duration(milliseconds: 250),
@@ -72,7 +77,7 @@ class MainPageState extends State<MainPage> {
           splashFactory: NoSplash.splashFactory,
         ),
         child: AnimatedDefaultTextStyle(
-          style: TextStyle(color: buttonID ? const Color.fromARGB(255, 33, 82, 243) : const Color.fromARGB(255, 0, 0, 0)),
+          style: TextStyle(color: buttonColor),
           duration: const Duration(milliseconds: 300),
           child: Text(option),
         ),
