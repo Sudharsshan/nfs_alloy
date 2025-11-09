@@ -6,6 +6,7 @@ import 'package:nfs_alloy/misllaneous/url_launcher.dart';
 
 class About extends StatelessWidget {
   const About({super.key});
+  final String instagramLink = "https://www.instagram.com/";
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,7 @@ class About extends StatelessWidget {
           ),
 
           // some spacing
-          const SizedBox(width: 20,),
+          const SizedBox(width: 20),
 
           // a list of texts
           Column(
@@ -45,23 +46,30 @@ class About extends StatelessWidget {
               Row(
                 children: [
                   // Instagram
-                  IconButton.filled(
-                    onPressed: () {
-                      // navigate to that website
-                      UrlLauncher(context: context, url: 'https://www.instagram.com/').launchUrl();
-                    },
-                    icon: Icon(
-                      Icons.square_rounded,
-                      color: Color.fromARGB(255, 238, 78, 198),
-                    ),
-                  ),
+                  linkLauncher(Icon(Icons.social_distance), instagramLink, context),
 
+                  // some spacing
+                  const SizedBox(width: 10,),
                   // other buttons
+                  linkLauncher(Icon(Icons.bolt), 'https://google.com', context),
                 ],
               ),
             ],
           ),
         ],
+      ),
+    );
+  }
+
+  Widget linkLauncher(Icon icon, String launchUrl, BuildContext context) {
+    return IconButton.filled(
+      onPressed: () {
+        // navigate to that website
+        UrlLauncher(context: context, url: launchUrl).launchUrl();
+      },
+      icon: Icon(
+        Icons.square_rounded,
+        color: Color.fromARGB(255, 238, 78, 198),
       ),
     );
   }
