@@ -86,22 +86,42 @@ class ImagePopUp {
                       const SizedBox(height: 45),
 
                       // download button
-                      Container(
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Color.fromARGB(150, 255, 255, 255),
+                      GestureDetector(
+                        onTap: (){
+                          Imagedownloader().downloadImage(imgUrl, name);
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Color.fromARGB(150, 255, 255, 255),
+                            ),
+                            borderRadius: BorderRadius.circular(12),
                           ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(Icons.download, color: const Color.fromARGB(255, 255, 255, 255),size: 20,),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.download,
+                                color: const Color.fromARGB(255, 255, 255, 255),
+                                size: 20,
+                              ),
 
-                            SizedBox(width: 8,),
+                              SizedBox(width: 8),
 
-                            Text('Download', style: TextStyle(color: const Color.fromARGB(255, 255, 255, 255), fontSize: 16),)
-                          ],
+                              Text(
+                                'Download',
+                                style: TextStyle(
+                                  color: const Color.fromARGB(
+                                    255,
+                                    255,
+                                    255,
+                                    255,
+                                  ),
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ],
