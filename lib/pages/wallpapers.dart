@@ -9,7 +9,9 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:nfs_alloy/widgets/image_pop_up.dart';
 
 class Wallpapers extends StatefulWidget {
-  const Wallpapers({super.key});
+  // Accept scroll controller from the parent
+  final ScrollController scrollController;
+  const Wallpapers({super.key, required this.scrollController});
 
   @override
   WallpaperState createState() => WallpaperState();
@@ -18,9 +20,13 @@ class Wallpapers extends StatefulWidget {
 class WallpaperState extends State<Wallpapers>
     with SingleTickerProviderStateMixin {
   late AnimationController controller;
-  late Future<List<Wallpaperloader>> wallpaperLoader;
 
-  bool isEnabled = true;
+  // 2. State variables for data
+  final List<Wallpaperloader> _wallpapers = [];
+  bool _isLoading = false;
+  bool _hasMore = true; // Stop trying if we ran out of images
+  int _currentCount = 0;
+  final int _chunkSize = 15; // How many to load at a time
 
   @override
   void initState() {
@@ -36,13 +42,65 @@ class WallpaperState extends State<Wallpapers>
     });
 
     // load the images once
-    wallpaperLoader = SanityService().fetchGalleryImages();
+    // wallpaperLoader = SanityService().fetchGalleryImages();
+    fetchMoreImages();
+
+    // listen to parent scroll behaviour
+    widget.scrollController.addListener(onScroll);
   }
 
   @override
   void dispose() {
+    widget.scrollController.removeListener(onScroll);
     controller.dispose();
     super.dispose();
+  }
+
+  void onScroll() {
+    // detect bottom of scroll position
+    if (_isLoading || !_hasMore) return;
+
+    // trigger if less than 200px from bottom
+    if (widget.scrollController.position.pixels >=
+        widget.scrollController.position.maxScrollExtent - 200) {
+      fetchMoreImages();
+    }
+  }
+
+  Future<void> fetchMoreImages() async {
+    if (_isLoading) return;
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      // Calculate indices: 0..14, 15..29,etc
+      final newImages = await SanityService().fetchGalleryImages(
+        start: _currentCount,
+        end: _currentCount + _chunkSize - 1,
+      );
+
+      if (mounted) {
+        setState(() {
+          if (newImages.isEmpty) {
+            _hasMore = false; // Loaded all images
+          } else {
+            _wallpapers.addAll(newImages);
+            _currentCount += newImages.length;
+
+            // if response img count is less than requested, reached end
+            if (newImages.length < _chunkSize) _hasMore = false;
+          }
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (kDebugMode) print("Fetch error: $e");
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   @override
@@ -51,27 +109,10 @@ class WallpaperState extends State<Wallpapers>
   }
 
   Widget pageContent() {
-    return FutureBuilder(
-      future: wallpaperLoader,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const SliverToBoxAdapter(
-            child: Center(child: CircularProgressIndicator.adaptive()),
-          );
-        }
-
-        if (snapshot.hasError) {
-          return SliverToBoxAdapter(
-            child: Center(child: Text('Error: ${snapshot.error}')),
-          );
-        }
-
-        List<Wallpaperloader> images = snapshot.data!;
-        if (kDebugMode) {
-          print('No. of images fetched: ${images.length}');
-        }
-
-        return SliverPadding(
+    return SliverMainAxisGroup(
+      slivers: [
+        // The images grid
+        SliverPadding(
           padding: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
           sliver: SliverMasonryGrid.count(
             // main & cross axis spacing
@@ -80,9 +121,9 @@ class WallpaperState extends State<Wallpapers>
             crossAxisCount: (MediaQuery.sizeOf(context).width < 1200) ? 3 : 4,
 
             // display images
-            childCount: images.length,
+            childCount: _wallpapers.length,
             itemBuilder: (context, index) {
-              Wallpaperloader img = images[index];
+              Wallpaperloader img = _wallpapers[index];
 
               // handle on tap to load a pop-up of full image
               final String heroTag = img.imageUrl;
@@ -98,8 +139,22 @@ class WallpaperState extends State<Wallpapers>
               );
             },
           ),
-        );
-      },
+        ),
+
+        // The loading icon spinner
+        SliverToBoxAdapter(
+          child: _isLoading
+              ? Padding(
+                  padding: const EdgeInsets.all(22),
+                  child: Center(
+                    child: CircularProgressIndicator.adaptive(
+                      valueColor: AlwaysStoppedAnimation(Colors.white),
+                    ),
+                  ),
+                )
+              : SizedBox.shrink(),
+        ),
+      ],
     );
   }
 

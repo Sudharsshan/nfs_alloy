@@ -15,8 +15,11 @@ class SanityService {
   // Sorted by creation date: Newest -> Oldest
 static const String query = '*[_type == "galleryImage"] | order(_createdAt desc)';
 
+  // final Uri url = Uri.parse(
+  //   'https://$projectID.api.sanity.io/v2021-10-21/data/query/$dataset?query=$query',
+  // );
   final Uri url = Uri.parse(
-    'https://$projectID.api.sanity.io/v2021-10-21/data/query/$dataset?query=$query',
+    'https://$projectID.api.sanity.io/v2021-10-21/data/query/$dataset?query=${Uri.encodeComponent(query)}',
   );
 
   String buildImageUrl(Map<String, dynamic> assetRef) {
@@ -33,7 +36,14 @@ static const String query = '*[_type == "galleryImage"] | order(_createdAt desc)
     return 'https://cdn.sanity.io/images/$projectID/$dataset/$newRef';
   }
 
-  Future<List<Wallpaperloader>> fetchGalleryImages() async {
+  Future<List<Wallpaperloader>> fetchGalleryImages({int start = 0, int end = 19}) async {
+    // Added start and end to allow lazy loading
+    final String paginatedQuery = '$query [$start..$end]';
+
+    // encode the url safely
+    final Uri url = Uri.parse(
+      'https://$projectID.api.sanity.io/v2021-10-21/data/query/$dataset?query=${Uri.encodeComponent(paginatedQuery)}',
+    );
     try {
       final response = await http.get(url);
 

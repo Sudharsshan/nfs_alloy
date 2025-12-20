@@ -37,7 +37,7 @@ class LandingPageState extends State<LandingPage> {
         ),
 
         // Wallpapers Page
-        Wallpapers(),
+        Wallpapers(scrollController: scrollController,),
       ],
     );
   }
