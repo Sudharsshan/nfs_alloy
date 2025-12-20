@@ -2,6 +2,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:nfs_alloy/models/wallpaper_loader.dart';
 import 'package:nfs_alloy/misllaneous/sanity_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -19,7 +20,7 @@ class Wallpapers extends StatefulWidget {
 
 class WallpaperState extends State<Wallpapers>
     with SingleTickerProviderStateMixin {
-  late AnimationController controller;
+  // late AnimationController controller;
 
   // 2. State variables for data
   final List<Wallpaperloader> _wallpapers = [];
@@ -32,14 +33,14 @@ class WallpaperState extends State<Wallpapers>
   void initState() {
     super.initState();
 
-    controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1200),
-    );
+    // controller = AnimationController(
+    //   vsync: this,
+    //   duration: const Duration(milliseconds: 1200),
+    // );
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      controller.forward();
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   controller.forward();
+    // });
 
     // load the images once
     // wallpaperLoader = SanityService().fetchGalleryImages();
@@ -52,7 +53,7 @@ class WallpaperState extends State<Wallpapers>
   @override
   void dispose() {
     widget.scrollController.removeListener(onScroll);
-    controller.dispose();
+    // controller.dispose();
     super.dispose();
   }
 
@@ -109,35 +110,39 @@ class WallpaperState extends State<Wallpapers>
   }
 
   Widget pageContent() {
+    int columnCount = (MediaQuery.sizeOf(context).width < 1200) ? 3 : 4;
     return SliverMainAxisGroup(
       slivers: [
         // The images grid
         SliverPadding(
           padding: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
-          sliver: SliverMasonryGrid.count(
-            // main & cross axis spacing
-            mainAxisSpacing: 4,
-            crossAxisSpacing: 4,
-            crossAxisCount: (MediaQuery.sizeOf(context).width < 1200) ? 3 : 4,
+          sliver: AnimationLimiter(
+            child: SliverMasonryGrid.count(
+              // main & cross axis spacing
+              mainAxisSpacing: 4,
+              crossAxisSpacing: 4,
+              crossAxisCount: (MediaQuery.sizeOf(context).width < 1200) ? 3 : 4,
 
-            // display images
-            childCount: _wallpapers.length,
-            itemBuilder: (context, index) {
-              Wallpaperloader img = _wallpapers[index];
+              // display images
+              childCount: _wallpapers.length,
+              itemBuilder: (context, index) {
+                Wallpaperloader img = _wallpapers[index];
 
-              // handle on tap to load a pop-up of full image
-              final String heroTag = img.imageUrl;
+                // handle on tap to load a pop-up of full image
+                final String heroTag = img.imageUrl;
 
-              return FadeTransition(
-                opacity: controller,
-                child: SlideTransition(
-                  position: controller.drive(
-                    Tween(begin: const Offset(0, 0.15), end: Offset.zero),
+                return AnimationConfiguration.staggeredGrid(
+                  position: index,
+                  duration: const Duration(milliseconds: 500),
+                  columnCount: columnCount,
+                  child: ScaleAnimation(
+                    child: FadeInAnimation(
+                      child: imgTileWithGesture(img, heroTag),
+                    ),
                   ),
-                  child: imgTileWithGesture(img, heroTag),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
         ),
 
