@@ -1,9 +1,9 @@
 // the main-page which just holds an empty wallpaper and the functions to load the other screens
 
 import 'package:flutter/material.dart';
-import 'package:nfs_alloy/misllaneous/liquid_glass_button.dart';
-import 'package:nfs_alloy/pages/about.dart';
+import 'package:nfs_alloy/widgets/liquid_glass_button.dart';
 import 'package:nfs_alloy/pages/landing_page.dart';
+import 'package:nfs_alloy/widgets/custom_drop_down_menu.dart';
 //import 'package:nfs_alloy/pages/empty.dart';
 
 class MainPage extends StatefulWidget {
@@ -51,7 +51,7 @@ class MainPageState extends State<MainPage> {
           PageView(
             controller: pageController,
             hitTestBehavior: HitTestBehavior.translucent,
-            children: [LandingPage(), About()],
+            children: [LandingPage(),],
             // onPageChanged: (value) {
             //   setState(() {
             //     switch (value) {
@@ -69,7 +69,9 @@ class MainPageState extends State<MainPage> {
           Positioned(
             right: 15,
             top: 15,
-            child: LiquidGlassButton(text: 'About'),
+            child: CustomDropDownMenu(
+              childWidget: LiquidGlassButton(text: 'About'),
+            ),
           ),
         ],
       ),

@@ -29,13 +29,13 @@ class LiquidGlassButton extends StatelessWidget {
   final double borderRadius;
 
   const LiquidGlassButton({
-    Key? key,
+    super.key,
     required this.text,
     this.onPressed,
     this.width = 200.0,
     this.height = 60.0,
     this.borderRadius = 30.0,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
