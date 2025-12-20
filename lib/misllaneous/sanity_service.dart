@@ -10,7 +10,10 @@ class SanityService {
   static const String projectID = "f624xxvx";
   static const String dataset = "production";
 
-  static const String query = '*[_type == "galleryImage"]';
+  // static const String query = '*[_type == "galleryImage"]';
+
+  // Sorted by creation date: Newest -> Oldest
+static const String query = '*[_type == "galleryImage"] | order(_createdAt desc)';
 
   final Uri url = Uri.parse(
     'https://$projectID.api.sanity.io/v2021-10-21/data/query/$dataset?query=$query',

@@ -16,7 +16,6 @@ class Imagedownloader {
       final web.Blob blob = web.Blob(
         // ignore: invalid_runtime_check_with_js_interop_types
         [bytes as JSAny, (contentType ?? 'application/octet-stream').toJS].toJS,
-        
       );
 
       final String blobUrl = web.URL.createObjectURL(blob);
@@ -25,8 +24,12 @@ class Imagedownloader {
       anchor.href = blobUrl;
 
       // Clean up the filename
+      String extension = urL.split('.').last.split('?').first;
+      if (extension.length > 4) extension = 'jpg';
       final String cleanFilename =
-          '${fileName.replaceAll(RegExp(r'[^\w\s\.-]'), '')}.jpg';
+          '${fileName.replaceAll(RegExp(r'[^\w\s\.-]'), '')}.$extension';
+      // final String cleanFilename =
+      //     '${fileName.replaceAll(RegExp(r'[^\w\s\.-]'), '')}.jpg';
       anchor.download = cleanFilename;
 
       // Add to the page, click it, and remove it
@@ -37,7 +40,7 @@ class Imagedownloader {
       // Revoke the temporary URL to free up memory
       web.URL.revokeObjectURL(blobUrl);
 
-      if(kDebugMode) print('Successfully downloaded image');
+      if (kDebugMode) print('Successfully downloaded image');
     } catch (e) {
       if (kDebugMode) {
         print('Download failed: $e');

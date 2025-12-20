@@ -88,7 +88,8 @@ class ImagePopUp {
                       // download button
                       GestureDetector(
                         onTap: (){
-                          Imagedownloader().downloadImage(imgUrl, name);
+                          final rawUrl = getRawSanityUrl(imgUrl);
+                          Imagedownloader().downloadImage(rawUrl, name);
                         },
                         child: Container(
                           padding: EdgeInsets.all(5),
@@ -133,5 +134,16 @@ class ImagePopUp {
         );
       },
     );
+  }
+
+  String getRawSanityUrl(String url){
+    // Split by ? to remove all processing params
+    final Uri uri = Uri.parse(url);
+
+    // reconstruct url without base query params
+    String rawUrl = '${uri.scheme}://${uri.host}${uri.path}';
+
+    // force Sanity to treat this as a download
+    return '$rawUrl?dl=';
   }
 }
