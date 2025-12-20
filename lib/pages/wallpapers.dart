@@ -12,7 +12,9 @@ import 'package:nfs_alloy/widgets/image_pop_up.dart';
 class Wallpapers extends StatefulWidget {
   // Accept scroll controller from the parent
   final ScrollController scrollController;
-  const Wallpapers({super.key, required this.scrollController});
+  final String category;
+
+  const Wallpapers({super.key, required this.scrollController, required this.category});
 
   @override
   WallpaperState createState() => WallpaperState();
@@ -80,6 +82,7 @@ class WallpaperState extends State<Wallpapers>
       final newImages = await SanityService().fetchGalleryImages(
         start: _currentCount,
         end: _currentCount + _chunkSize - 1,
+        category: widget.category,
       );
 
       if (mounted) {
