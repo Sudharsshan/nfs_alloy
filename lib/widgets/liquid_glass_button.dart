@@ -52,18 +52,18 @@ class LiquidGlassButton extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(borderRadius),
               border: Border.all(
-                color: Colors.white.withOpacity(0.3),
+                color: Color.fromARGB((0.3*255).ceil(), 255, 255, 255),
                 width: 1.5,
               ),
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  Colors.white.withOpacity(0.4), // Highlight
-                  Colors.white.withOpacity(0.05), // Fade to transparent
+                  Color.fromARGB((0.4*255).ceil(), 255, 255, 255),// Highlight
+                  Color.fromARGB((0.05*255).ceil(), 255, 255, 255), // Fade to transparent
                 ],
               ),
-              color: const Color(0xFF2A2A3A).withOpacity(0.25), // Dark translucent base (purple-gray tone)
+              color: const Color(0xFF2A2A3A).withAlpha((0.25*255).ceil()), // Dark translucent base (purple-gray tone)
             ),
             child: Stack(
               children: [
@@ -76,7 +76,7 @@ class LiquidGlassButton extends StatelessWidget {
                     height: 100,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Colors.white.withOpacity(0.15),
+                      color: Color.fromARGB((0.15*255).ceil(), 255, 255, 255),
                     ),
                   ),
                 ),

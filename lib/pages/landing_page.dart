@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:nfs_alloy/misllaneous/sanity_service.dart';
 import 'package:nfs_alloy/pages/wallpapers.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:nfs_alloy/widgets/game_selector.dart';
 
 class LandingPage extends StatefulWidget {
   const LandingPage({super.key});
@@ -23,20 +24,6 @@ class LandingPageState extends State<LandingPage> {
 
   List<String> activeCategories = ['All'];
 
-  // Map of Disply Name -> Sanity Value
-  final Map<String, String> gameCategories = {
-    'All': 'other',
-    'NFS 2015': 'nfs-2015',
-    'NFS Heat': 'nfs-heat',
-    'RDR 2': 'rdr2',
-    'Cyberpunk': 'cyberpunk',
-    'Elden Ring': 'elden-ring',
-    'Forza 4': 'fh4',
-    'Forza 5': 'fh5',
-    'Torque Drift': 'toqrue-drift',
-    'NFS Rivals': 'nfs-rivals',
-  };
-
   void loadCategories() async {
     if (kDebugMode) print('Fetching categories');
     List<String> fetched = await SanityService().fetchActiveCategories();
@@ -53,13 +40,6 @@ class LandingPageState extends State<LandingPage> {
   void initState() {
     super.initState();
     loadCategories();
-  }
-
-  // make names prettier
-  String getPrettyNames(String code) {
-    if (code == 'All') return 'All';
-    // return dictionary name OR fallBack to capitalizing the code
-    return gameCategories[code] ?? code.toUpperCase().replaceAll('-', ' ');
   }
 
   @override
@@ -84,7 +64,15 @@ class LandingPageState extends State<LandingPage> {
         SliverToBoxAdapter(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [gameSelector()],
+            children: [
+              GameSelector(
+                context: context,
+                scrollController: scrollController,
+                selectedGame: selectedGame,
+                activeCategories: activeCategories,
+                updateUIfunc: updateUI,
+              ),
+            ],
           ),
         ),
 
@@ -120,15 +108,15 @@ class LandingPageState extends State<LandingPage> {
             child: GestureDetector(
               onTap: () => scrollControl(),
               child: AnimatedDefaultTextStyle(
-                style: GoogleFonts.ibmPlexMono(
+                style: GoogleFonts.tinos(
                   color: mouseHover
                       ? const Color.fromARGB(255, 83, 83, 83)
                       : const Color.fromARGB(255, 0, 0, 0),
                   fontSize:
-                      MediaQuery.sizeOf(context).width * fontWidth * 0.001,
+                      MediaQuery.sizeOf(context).width * fontWidth * 0.002,
                 ),
                 duration: const Duration(milliseconds: 300),
-                child: Text('Wallpapers'),
+                child: Text('Pictures.'),
               ),
             ),
           ),
@@ -137,50 +125,10 @@ class LandingPageState extends State<LandingPage> {
     );
   }
 
-  Widget gameSelector() {
-    if (activeCategories.length <= 1) return SizedBox.shrink();
-
-    return SizedBox(
-      height: 50,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        padding: EdgeInsets.symmetric(horizontal: 16),
-        itemCount: activeCategories.length,
-        separatorBuilder: (c, i) => SizedBox(width: 12),
-        itemBuilder: (context, index) {
-          String value = activeCategories[index];
-          String name = getPrettyNames(value);
-          bool isSelected = selectedGame == value;
-
-          return GestureDetector(
-            onTap: () {
-              setState(() {
-                selectedGame = value;
-              });
-
-              double galleryStart = MediaQuery.sizeOf(context).height;
-
-              if (scrollController.hasClients) {
-                scrollController.animateTo(
-                  galleryStart,
-                  duration: const Duration(milliseconds: 500),
-                  curve: Curves.easeOut,
-                );
-              }
-            },
-            child: Chip(
-              label: Text(name),
-              backgroundColor: isSelected ? Colors.white : Colors.grey,
-              labelStyle: TextStyle(
-                color: isSelected ? Colors.black : Colors.white,
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-              ),
-              side: BorderSide(color: Colors.white24),
-            ),
-          );
-        },
-      ),
-    );
+  void updateUI(String value){
+    setState(() {
+      selectedGame = value;
+    });
   }
 
   // Future<void> lazyScrollDown() async {
