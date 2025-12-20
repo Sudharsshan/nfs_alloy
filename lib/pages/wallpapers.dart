@@ -129,7 +129,7 @@ class WallpaperState extends State<Wallpapers>
                 Wallpaperloader img = _wallpapers[index];
 
                 // handle on tap to load a pop-up of full image
-                final String heroTag = img.imageUrl;
+                final String heroTag = '${img.imageUrl}_$index';
 
                 return AnimationConfiguration.staggeredGrid(
                   position: index,
