@@ -108,7 +108,7 @@ class LandingPageState extends State<LandingPage> {
             child: GestureDetector(
               onTap: () => scrollControl(),
               child: AnimatedDefaultTextStyle(
-                style: GoogleFonts.tinos(
+                style: GoogleFonts.lavishlyYours(
                   color: mouseHover
                       ? const Color.fromARGB(255, 83, 83, 83)
                       : const Color.fromARGB(255, 0, 0, 0),
