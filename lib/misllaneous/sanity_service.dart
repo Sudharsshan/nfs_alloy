@@ -1,6 +1,7 @@
 // a class to fetch the images and other relevant data from the Sanity server
 
 import 'dart:convert';
+import 'dart:math';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'package:nfs_alloy/models/wallpaper_loader.dart';
@@ -94,6 +95,52 @@ class SanityService {
       }
     } catch (e) {
       return [];
+    }
+  }
+
+  // Add this inside your SanityService class
+  Future<String?> fetchRandomBackgroundImage() async {
+    // 1. Get the total count of images first (Fast operation)
+    const String countQuery = 'count(*[_type == "galleryImage"])';
+    
+    final Uri countUrl = Uri.parse(
+      'https://$projectID.api.sanity.io/v2021-10-21/data/query/$dataset?query=${Uri.encodeComponent(countQuery)}',
+    );
+
+    try {
+      final countResponse = await http.get(countUrl);
+      if (countResponse.statusCode != 200) return null;
+
+      final int totalImages = json.decode(countResponse.body)['result'];
+      if (totalImages == 0) return null;
+
+      // 2. Generate a random index
+      // We need dart:math for this. Import it at the top if you haven't: import 'dart:math';
+      final int randomIndex = Random().nextInt(totalImages);
+
+      // 3. Fetch exactly ONE image at that random index
+      // Query: Get all images, order them (vital for consistency), and slice [index...index+1]
+      final String fetchQuery = '*[_type == "galleryImage"] | order(_createdAt desc) [$randomIndex...${randomIndex + 1}]';
+      
+      final Uri fetchUrl = Uri.parse(
+        'https://$projectID.api.sanity.io/v2021-10-21/data/query/$dataset?query=${Uri.encodeComponent(fetchQuery)}',
+      );
+
+      final fetchResponse = await http.get(fetchUrl);
+      
+      if (fetchResponse.statusCode == 200) {
+        final data = json.decode(fetchResponse.body);
+        final List<dynamic> results = data['result'];
+        
+        if (results.isNotEmpty) {
+           // Reuse your existing logic to build the full URL
+           return buildImageUrl(results[0]['image']);
+        }
+      }
+      return null;
+    } catch (e) {
+      print("Sniper shot failed: $e");
+      return null;
     }
   }
 }

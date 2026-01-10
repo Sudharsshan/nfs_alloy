@@ -23,6 +23,9 @@ class LandingPageState extends State<LandingPage> {
   bool mouseHover = false;
 
   String selectedGame = 'All';
+  String? backgroundImageUrl;
+
+  bool isLoading = true;
 
   List<String> activeCategories = ['All'];
 
@@ -40,10 +43,27 @@ class LandingPageState extends State<LandingPage> {
     }
   }
 
+  void loadRandomBackground() async {
+    // Call our new sniper method
+    String? url = await SanityService().fetchRandomBackgroundImage();
+
+    if (mounted) {
+      setState(() {
+        backgroundImageUrl = url;
+        isLoading = false;
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+
+    // Load all the categories that are available
     loadCategories();
+
+    // load a random background image i.e. fetch it's Url to display as background
+    loadRandomBackground();
   }
 
   @override
@@ -59,7 +79,9 @@ class LandingPageState extends State<LandingPage> {
       child: Stack(
         children: [
           // Background image
-          Positioned.fill(child: Image.asset('lib/assets/bg.png', fit: BoxFit.cover,),),
+          Positioned.fill(
+            child:backgroundBuilder(),
+          ),
 
           // 2. Frosted blur overlay with dynamic clear hole (between background and content)
           BackdropFilter(
@@ -124,6 +146,29 @@ class LandingPageState extends State<LandingPage> {
     );
   }
 
+  Widget backgroundBuilder() {
+    // If Url is present show that image
+    if (backgroundImageUrl != null) {
+      return Image.network(
+        scale: 0.4,
+        backgroundImageUrl!,
+        fit: BoxFit.cover,
+        loadingBuilder: (context, child, loadingProgress) {
+          if (loadingProgress == null) return child;
+          // while the image is loading show a placeHolder image
+          return Image.asset('lib/assets/bg.png', fit: BoxFit.cover);
+        },
+        errorBuilder: (context, child, stackTrace) {
+          // If no internet or cannot laod image, display the same placeHolder image
+          return Image.asset('lib/assets/bg.png', fit: BoxFit.cover);
+        },
+      );
+    }
+
+    // If nothing worked, then fall back to local image indicates failure to connect with Sanity.IO
+    return Image.asset('lib/assets/bg.png', fit: BoxFit.cover);
+  }
+
   Widget wallpaperButton() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -138,17 +183,6 @@ class LandingPageState extends State<LandingPage> {
             child: GestureDetector(
               onTap: () => scrollControl(),
               child: Container(),
-              // child: AnimatedDefaultTextStyle(
-              //   style: GoogleFonts.tinos(
-              //     color: mouseHover
-              //         ? const Color.fromARGB(255, 83, 83, 83)
-              //         : const Color.fromARGB(255, 0, 0, 0),
-              //     fontSize:
-              //         MediaQuery.sizeOf(context).width * fontWidth * 0.002,
-              //   ),
-              //   duration: const Duration(milliseconds: 300),
-              //   child: Text('Pictures.'),
-              // ),
             ),
           ),
         ),
