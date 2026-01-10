@@ -53,12 +53,12 @@ class GameSelectorState extends State<GameSelector> {
     if (widget.activeCategories.length <= 1) return SizedBox.shrink();
 
     return SizedBox(
-      height: 50,
+      height: 60,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         padding: EdgeInsets.symmetric(horizontal: 16),
         itemCount: widget.activeCategories.length,
-        separatorBuilder: (c, i) => SizedBox(width: 12),
+        separatorBuilder: (c, i) => SizedBox(width: 15),
         itemBuilder: (context, index) {
           String value = widget.activeCategories[index];
           String name = getPrettyNames(value);
@@ -86,6 +86,7 @@ class GameSelectorState extends State<GameSelector> {
             },
             child: Chip(
               label: Text(name),
+              elevation: 50,
               backgroundColor: isSelected ? Colors.white : Colors.grey,
               labelStyle: TextStyle(
                 color: isSelected ? Colors.black : Colors.white,

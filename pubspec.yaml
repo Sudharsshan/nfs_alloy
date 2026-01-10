@@ -26,7 +26,7 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   
-  # assets:
-    # - lib/assets/tyre.json
+  assets:
+    - lib/assets/bg.png
     # - lib/assets/nissinneon.png
     # - lib/assets/brushstroke.png

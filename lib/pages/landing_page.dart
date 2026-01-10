@@ -1,8 +1,10 @@
+import 'dart:ui' as ui;
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:nfs_alloy/misllaneous/sanity_service.dart';
+import 'package:nfs_alloy/misllaneous/spotlight_painter.dart';
 import 'package:nfs_alloy/pages/wallpapers.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:nfs_alloy/widgets/game_selector.dart';
 
 class LandingPage extends StatefulWidget {
@@ -24,6 +26,8 @@ class LandingPageState extends State<LandingPage> {
 
   List<String> activeCategories = ['All'];
 
+  Offset cursorPosition = Offset.zero;
+
   void loadCategories() async {
     if (kDebugMode) print('Fetching categories');
     List<String> fetched = await SanityService().fetchActiveCategories();
@@ -44,25 +48,58 @@ class LandingPageState extends State<LandingPage> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      controller: scrollController,
-      slivers: [
-        // HOME PAGE
-        SliverToBoxAdapter(
-          child: GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTap: () {
-              scrollControl();
-            },
-            child: SizedBox(
-              height: MediaQuery.sizeOf(context).height,
-              child: wallpaperButton(),
+    return MouseRegion(
+      onHover: (event) {
+        setState(() {
+          cursorPosition = event.localPosition;
+        });
+      },
+      hitTestBehavior: HitTestBehavior
+          .translucent, // Allow event to pass through for underlying widgets
+      child: Stack(
+        children: [
+          // Background image
+          Positioned.fill(child: Image.asset('lib/assets/bg.png', fit: BoxFit.cover,),),
+
+          // 2. Frosted blur overlay with dynamic clear hole (between background and content)
+          BackdropFilter(
+            filter: ui.ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+            child: Container(
+              color: Colors.white.withAlpha(
+                (0.15 * 255).ceil(),
+              ), // Glassmorphic tint
+              child: CustomPaint(painter: SpotlightPainter(cursorPosition)),
             ),
           ),
-        ),
 
-        SliverToBoxAdapter(
-          child: Column(
+          // Wallpaper content
+          CustomScrollView(
+            controller: scrollController,
+            slivers: [
+              // Wallpaper button
+              SliverToBoxAdapter(
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () {
+                    scrollControl();
+                  },
+                  child: SizedBox(
+                    height: MediaQuery.sizeOf(context).height,
+                    child: wallpaperButton(),
+                  ),
+                ),
+              ),
+
+              // Wallpapers Page
+              Wallpapers(
+                key: ValueKey(selectedGame),
+                scrollController: scrollController,
+                category: selectedGame,
+              ),
+            ],
+          ),
+
+          Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               GameSelector(
@@ -74,15 +111,8 @@ class LandingPageState extends State<LandingPage> {
               ),
             ],
           ),
-        ),
-
-        // Wallpapers Page
-        Wallpapers(
-          key: ValueKey(selectedGame),
-          scrollController: scrollController,
-          category: selectedGame,
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -107,17 +137,18 @@ class LandingPageState extends State<LandingPage> {
             onExit: (_) => setState(() => mouseHover = false),
             child: GestureDetector(
               onTap: () => scrollControl(),
-              child: AnimatedDefaultTextStyle(
-                style: GoogleFonts.tinos(
-                  color: mouseHover
-                      ? const Color.fromARGB(255, 83, 83, 83)
-                      : const Color.fromARGB(255, 0, 0, 0),
-                  fontSize:
-                      MediaQuery.sizeOf(context).width * fontWidth * 0.002,
-                ),
-                duration: const Duration(milliseconds: 300),
-                child: Text('Pictures.'),
-              ),
+              child: Container(),
+              // child: AnimatedDefaultTextStyle(
+              //   style: GoogleFonts.tinos(
+              //     color: mouseHover
+              //         ? const Color.fromARGB(255, 83, 83, 83)
+              //         : const Color.fromARGB(255, 0, 0, 0),
+              //     fontSize:
+              //         MediaQuery.sizeOf(context).width * fontWidth * 0.002,
+              //   ),
+              //   duration: const Duration(milliseconds: 300),
+              //   child: Text('Pictures.'),
+              // ),
             ),
           ),
         ),
@@ -125,38 +156,9 @@ class LandingPageState extends State<LandingPage> {
     );
   }
 
-  void updateUI(String value){
+  void updateUI(String value) {
     setState(() {
       selectedGame = value;
     });
   }
-
-  // Future<void> lazyScrollDown() async {
-  //   if (!scrollController.hasClients) return;
-
-  //   final double viewportHeight = MediaQuery.of(context).size.height;
-
-  //   const double stepFraction = 0.4; // how much of a screen per "drag"
-  //   const Duration stepDuration = Duration(milliseconds: 300);
-  //   const Duration pause = Duration(milliseconds: 110);
-
-  //   // Scroll about 1.2 screens down (enough to enter Wallpapers)
-  //   final double target = scrollController.offset + viewportHeight * 1.2;
-
-  //   while (scrollController.offset < target) {
-  //     final nextOffset =
-  //         (scrollController.offset + viewportHeight * stepFraction).clamp(
-  //           0.0,
-  //           scrollController.position.maxScrollExtent,
-  //         );
-
-  //     await scrollController.animateTo(
-  //       nextOffset,
-  //       duration: stepDuration,
-  //       curve: Curves.linear,
-  //     );
-
-  //     await Future.delayed(pause);
-  //   }
-  // }
 }
