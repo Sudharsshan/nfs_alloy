@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'dart:math';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'package:nfs_alloy/models/wallpaper_loader.dart';
@@ -139,7 +140,9 @@ class SanityService {
       }
       return null;
     } catch (e) {
-      print("Sniper shot failed: $e");
+      if (kDebugMode) {
+        print("Sniper shot failed: $e");
+      }
       return null;
     }
   }

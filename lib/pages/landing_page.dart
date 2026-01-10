@@ -121,6 +121,7 @@ class LandingPageState extends State<LandingPage> {
             ],
           ),
 
+          // Menu buttons to show game names
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
