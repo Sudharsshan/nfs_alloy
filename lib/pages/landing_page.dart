@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:nfs_alloy/misllaneous/sanity_service.dart';
 import 'package:nfs_alloy/misllaneous/spotlight_painter.dart';
 import 'package:nfs_alloy/pages/wallpapers.dart';
+import 'package:nfs_alloy/widgets/credits.dart';
 import 'package:nfs_alloy/widgets/custom_drop_down_menu.dart';
 import 'package:nfs_alloy/widgets/game_selector.dart';
 import 'package:nfs_alloy/widgets/liquid_glass_button.dart';
@@ -47,6 +48,7 @@ class LandingPageState extends State<LandingPage> {
   }
 
   void loadRandomBackground() async {
+    // Obtain physical device width, not using context since it still might be under construction
     final view = WidgetsBinding.instance.platformDispatcher.views.first;
     final physicalWidth = view.physicalSize.width;
 
@@ -126,37 +128,7 @@ class LandingPageState extends State<LandingPage> {
 
               // Bottom credits or extras
               SliverToBoxAdapter(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-                  child: SizedBox(
-                    width: 400,
-                    height: 150,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      spacing: 3,
-                      children: [
-                        Text(
-                          'Designed with ♥ by:',
-                          style: TextStyle(
-                            color: ui.Color.fromARGB(255, 153, 153, 153),
-                            fontSize: revealTextSize * 0.08,
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                          child: Text(
-                            'Ryujin Shinko',
-                            style: TextStyle(
-                              color: ui.Color.fromARGB(255, 153, 153, 153),
-                              fontSize: revealTextSize * 0.08,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                child: Credits(revealTextSize: revealTextSize),
               ),
             ],
           ),
@@ -228,10 +200,6 @@ class LandingPageState extends State<LandingPage> {
           padding: EdgeInsetsGeometry.fromLTRB(16, 0, 0, 16),
           child: MouseRegion(
             cursor: SystemMouseCursors.click,
-            onEnter: (_) =>
-                setState(() => mouseHover = true), // NOT REQUIRED REMOVE
-            onExit: (_) =>
-                setState(() => mouseHover = false), //NOT REQUIRED REMOVE
             child: GestureDetector(
               onTap: () => scrollControl(),
               child: RevealText(text: 'Wallpapers', fontSize: textSize),
