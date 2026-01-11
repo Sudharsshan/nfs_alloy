@@ -69,6 +69,7 @@ class LandingPageState extends State<LandingPage> {
 
   @override
   Widget build(BuildContext context) {
+    double revealTextSize = MediaQuery.sizeOf(context).width * 0.14;
     return MouseRegion(
       onHover: (event) {
         setState(() {
@@ -106,7 +107,7 @@ class LandingPageState extends State<LandingPage> {
                   },
                   child: SizedBox(
                     height: MediaQuery.sizeOf(context).height,
-                    child: wallpaperButton(),
+                    child: wallpaperButton(revealTextSize),
                   ),
                 ),
               ),
@@ -193,9 +194,9 @@ class LandingPageState extends State<LandingPage> {
     return Image.asset('lib/assets/bg.png', fit: BoxFit.cover);
   }
 
-  Widget wallpaperButton() {
+  Widget wallpaperButton(double textSize) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.end,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
@@ -208,7 +209,7 @@ class LandingPageState extends State<LandingPage> {
                 setState(() => mouseHover = false), //NOT REQUIRED REMOVE
             child: GestureDetector(
               onTap: () => scrollControl(),
-              child: RevealText(),
+              child: RevealText(text: 'Wallpapers',fontSize: textSize,),
             ),
           ),
         ),
