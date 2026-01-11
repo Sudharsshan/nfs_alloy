@@ -109,10 +109,6 @@ class WallpaperState extends State<Wallpapers>
 
   @override
   Widget build(BuildContext context) {
-    return pageContent();
-  }
-
-  Widget pageContent() {
     int columnCount = (MediaQuery.sizeOf(context).width < 1200) ? 3 : 4;
     return SliverMainAxisGroup(
       slivers: [
