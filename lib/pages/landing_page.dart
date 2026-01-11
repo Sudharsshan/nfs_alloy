@@ -6,6 +6,7 @@ import 'package:nfs_alloy/misllaneous/sanity_service.dart';
 import 'package:nfs_alloy/misllaneous/spotlight_painter.dart';
 import 'package:nfs_alloy/pages/wallpapers.dart';
 import 'package:nfs_alloy/widgets/game_selector.dart';
+import 'package:nfs_alloy/widgets/reveal_text.dart';
 
 class LandingPage extends StatefulWidget {
   const LandingPage({super.key});
@@ -79,9 +80,7 @@ class LandingPageState extends State<LandingPage> {
       child: Stack(
         children: [
           // Background image
-          Positioned.fill(
-            child:backgroundBuilder(),
-          ),
+          Positioned.fill(child: backgroundBuilder()),
 
           // 2. Frosted blur overlay with dynamic clear hole (between background and content)
           BackdropFilter(
@@ -117,6 +116,30 @@ class LandingPageState extends State<LandingPage> {
                 key: ValueKey(selectedGame),
                 scrollController: scrollController,
                 category: selectedGame,
+              ),
+
+              // Bottom credits or extras
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  child: Container(
+                    width: 400,
+                    height: 150,
+                    color: Colors.amber,
+                    child: Center(
+                      child: Column(
+                        spacing: 3,
+                        children: [
+                          Text('Designed with ♥ by:'),
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(30, 0, 0, 0),
+                            child: Text('Ryujin Shinko'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
               ),
             ],
           ),
@@ -179,11 +202,13 @@ class LandingPageState extends State<LandingPage> {
           padding: EdgeInsetsGeometry.fromLTRB(16, 0, 0, 16),
           child: MouseRegion(
             cursor: SystemMouseCursors.click,
-            onEnter: (_) => setState(() => mouseHover = true),
-            onExit: (_) => setState(() => mouseHover = false),
+            onEnter: (_) =>
+                setState(() => mouseHover = true), // NOT REQUIRED REMOVE
+            onExit: (_) =>
+                setState(() => mouseHover = false), //NOT REQUIRED REMOVE
             child: GestureDetector(
               onTap: () => scrollControl(),
-              child: Container(),
+              child: RevealText(),
             ),
           ),
         ),
