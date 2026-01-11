@@ -50,33 +50,41 @@ class LiquidGlassButton extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(borderRadius),
               border: Border.all(
-                color: Color.fromARGB((0.3*255).ceil(), 255, 255, 255),
+                color: Color.fromARGB((0.3 * 255).ceil(), 255, 255, 255),
                 width: 1.5,
               ),
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  Color.fromARGB((0.4*255).ceil(), 255, 255, 255),// Highlight
-                  Color.fromARGB((0.05*255).ceil(), 255, 255, 255), // Fade to transparent
+                  Color.fromARGB(
+                    (0.4 * 255).ceil(),
+                    255,
+                    255,
+                    255,
+                  ), // Highlight
+                  Color.fromARGB(
+                    (0.05 * 255).ceil(),
+                    255,
+                    255,
+                    255,
+                  ), // Fade to transparent
                 ],
               ),
-              color: const Color(0xFF2A2A3A).withAlpha((0.25*255).ceil()), // Dark translucent base (purple-gray tone)
+              color: const Color(0xFF2A2A3A).withAlpha(
+                (0.25 * 255).ceil(),
+              ), // Dark translucent base (purple-gray tone)
             ),
-            child: Stack(
-              children: [
-                Center(
-                  child: Text(
-                    text,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1.2,
-                    ),
-                  ),
+            child: Center(
+              child: Text(
+                text,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1.2,
                 ),
-              ],
+              ),
             ),
           ),
         ),

@@ -49,37 +49,18 @@ class LiquidGlassMenuItem extends StatelessWidget {
                   ),
                   color: const Color(0xFF2A2A3A).withAlpha((0.25 * 255).ceil()),
                 ),
-                child: Stack(
-                  alignment: AlignmentGeometry.center,
+                child: Row(
                   children: [
-                    Container(
-                      width: 120,
-                      height: 30,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.rectangle,
-                        borderRadius: BorderRadius.circular(16),
-                        color: Color.fromARGB(
-                          (0.15 * 255).ceil(),
-                          255,
-                          255,
-                          255,
-                        ),
+                    const SizedBox(width: 8),
+                    FaIcon(icon, color: Colors.white, size: 20),
+                    const SizedBox(width: 12),
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
                       ),
-                    ),
-                    Row(
-                      children: [
-                        const SizedBox(width: 8),
-                        FaIcon(icon, color: Colors.white, size: 20),
-                        const SizedBox(width: 12),
-                        Text(
-                          title,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
                     ),
                   ],
                 ),
