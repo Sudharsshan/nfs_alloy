@@ -70,7 +70,7 @@ class MainPageState extends State<MainPage> {
             right: 15,
             top: 15,
             child: CustomDropDownMenu(
-              childWidget: LiquidGlassButton(text: 'About'),
+              childWidget: LiquidGlassButton(text: 'Socials'),
             ),
           ),
         ],
