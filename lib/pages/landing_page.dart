@@ -47,8 +47,11 @@ class LandingPageState extends State<LandingPage> {
   }
 
   void loadRandomBackground() async {
-    // Call our new sniper method
-    String? url = await SanityService().fetchRandomBackgroundImage();
+    final view = WidgetsBinding.instance.platformDispatcher.views.first;
+    final physicalWidth = view.physicalSize.width;
+
+    int targetWidth = physicalWidth.round();
+    String? url = await SanityService().fetchRandomBackgroundImage(targetWidth: targetWidth);
 
     if (mounted) {
       setState(() {

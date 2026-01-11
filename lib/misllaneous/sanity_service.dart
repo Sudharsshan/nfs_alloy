@@ -103,7 +103,7 @@ class SanityService {
     }
   }
 
-  Future<String?> fetchRandomBackgroundImage() async {
+  Future<String?> fetchRandomBackgroundImage({required int targetWidth}) async {
     // 1. Get the total count of images first (Fast operation)
     const String countQuery = 'count(*[_type == "galleryImage"])';
     
@@ -138,7 +138,7 @@ class SanityService {
         
         if (results.isNotEmpty) {
            // Reuse your existing logic to build the full URL
-           return buildImageUrl(results[0]['image'], customUrl: true);
+           return buildImageUrl(results[0]['image'],width: targetWidth ,customUrl: true);
         }
       }
       return null;
