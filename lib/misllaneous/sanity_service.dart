@@ -11,7 +11,7 @@ class SanityService {
   static const String projectID = "f624xxvx";
   static const String dataset = "production";
 
-  String buildImageUrl(Map<String, dynamic> assetRef) {
+  String buildImageUrl(Map<String, dynamic> assetRef, {int width = 1080, int quality = 75, bool customUrl = false}) {
     if (assetRef['asset'] == null || assetRef['asset']['_ref'] == null) {
       return ''; // Return a placeholder or handle error
     }
@@ -22,7 +22,11 @@ class SanityService {
         .replaceAll('-png', '.png')
         .replaceAll('-webp', '.webp');
 
-    return 'https://cdn.sanity.io/images/$projectID/$dataset/$newRef';
+    String customUrlSuffix = '?w=$width&q=$quality&auto=format&fit=max';
+    
+    String finalUrl = 'https://cdn.sanity.io/images/$projectID/$dataset/$newRef${customUrl? customUrlSuffix : ''}';
+
+    return finalUrl;
   }
 
   Future<List<Wallpaperloader>> fetchGalleryImages({
@@ -99,7 +103,6 @@ class SanityService {
     }
   }
 
-  // Add this inside your SanityService class
   Future<String?> fetchRandomBackgroundImage() async {
     // 1. Get the total count of images first (Fast operation)
     const String countQuery = 'count(*[_type == "galleryImage"])';
@@ -135,7 +138,7 @@ class SanityService {
         
         if (results.isNotEmpty) {
            // Reuse your existing logic to build the full URL
-           return buildImageUrl(results[0]['image']);
+           return buildImageUrl(results[0]['image'], customUrl: true);
         }
       }
       return null;
