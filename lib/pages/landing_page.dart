@@ -122,22 +122,21 @@ class LandingPageState extends State<LandingPage> {
               // Bottom credits or extras
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                  child: SizedBox(
                     width: 400,
                     height: 150,
-                    color: Colors.amber,
-                    child: Center(
-                      child: Column(
-                        spacing: 3,
-                        children: [
-                          Text('Designed with ♥ by:'),
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(30, 0, 0, 0),
-                            child: Text('Ryujin Shinko'),
-                          ),
-                        ],
-                      ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      spacing: 3,
+                      children: [
+                        Text('Designed with ♥ by:', style: TextStyle(color: ui.Color.fromARGB(255, 153, 153, 153), fontSize: revealTextSize*0.08),),
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(30, 0, 0, 0),
+                          child: Text('Ryujin Shinko', style: TextStyle(color: ui.Color.fromARGB(255, 153, 153, 153), fontSize: revealTextSize*0.08),),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -209,7 +208,7 @@ class LandingPageState extends State<LandingPage> {
                 setState(() => mouseHover = false), //NOT REQUIRED REMOVE
             child: GestureDetector(
               onTap: () => scrollControl(),
-              child: RevealText(text: 'Wallpapers',fontSize: textSize,),
+              child: RevealText(text: 'Wallpapers', fontSize: textSize),
             ),
           ),
         ),

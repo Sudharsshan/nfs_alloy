@@ -15,7 +15,7 @@ class RevealTextState extends State<RevealText>
 
   // Animation duration CHANGE IF NEEDED HERE
   Duration animationDuration = const Duration(seconds: 3);
-  Duration revealDuration = const Duration(milliseconds: 300);
+  Duration revealDuration = const Duration(milliseconds: 100);
   Duration pauseDuration = const Duration(seconds: 1);
 
   @override
@@ -72,7 +72,7 @@ class RevealTextState extends State<RevealText>
                   style: TextStyle(
                     fontSize: widget.fontSize,
                     fontWeight: FontWeight.w600,
-                    color: Colors.grey,
+                    color: const Color.fromARGB(255, 160, 160, 160),
                   ),
                 ),
               );
