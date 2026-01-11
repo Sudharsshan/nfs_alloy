@@ -12,14 +12,12 @@ import 'package:flutter/material.dart';
 /// You can customize the text, onPressed callback, width, height, etc.
 ///
 /// Usage:
-/// ```dart
 /// LiquidGlassButton(
 ///   text: 'BUTTON',
 ///   onPressed: () {
 ///     // Your action here
 ///   },
 /// )
-/// ```
 
 class LiquidGlassButton extends StatelessWidget {
   final String text;
@@ -34,7 +32,7 @@ class LiquidGlassButton extends StatelessWidget {
     this.onPressed,
     this.width = 200.0,
     this.height = 60.0,
-    this.borderRadius = 30.0,
+    this.borderRadius = 16.0,
   });
 
   @override
@@ -67,19 +65,6 @@ class LiquidGlassButton extends StatelessWidget {
             ),
             child: Stack(
               children: [
-                // Inner subtle glow/highlight
-                Positioned(
-                  top: -20,
-                  left: -20,
-                  child: Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Color.fromARGB((0.15*255).ceil(), 255, 255, 255),
-                    ),
-                  ),
-                ),
                 Center(
                   child: Text(
                     text,
