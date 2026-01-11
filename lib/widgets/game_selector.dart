@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:nfs_alloy/widgets/liquid_glass_button.dart';
 
 class GameSelector extends StatefulWidget {
   final List<String> activeCategories;
@@ -53,7 +55,7 @@ class GameSelectorState extends State<GameSelector> {
     if (widget.activeCategories.length <= 1) return SizedBox.shrink();
 
     return SizedBox(
-      height: 60,
+      height: 100,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         padding: EdgeInsets.symmetric(horizontal: 16),
@@ -84,19 +86,21 @@ class GameSelectorState extends State<GameSelector> {
                 );
               }
             },
-            child: Chip(
-              label: Text(name),
-              elevation: 50,
-              backgroundColor: isSelected ? Colors.white : Colors.grey,
-              labelStyle: TextStyle(
-                color: isSelected ? Colors.black : Colors.white,
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-              ),
-              side: BorderSide(color: Colors.white24),
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 20),
+              child: gameIDChips(isSelected, name),
             ),
           );
         },
       ),
+    );
+  }
+
+  Widget gameIDChips(bool activeButton, String gameName) {
+    return LiquidGlassButton(
+      text: gameName,
+      textColor: activeButton ? Colors.black : Colors.white,
+      isActive: activeButton,
     );
   }
 }

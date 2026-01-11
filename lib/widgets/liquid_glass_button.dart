@@ -25,6 +25,8 @@ class LiquidGlassButton extends StatelessWidget {
   final double width;
   final double height;
   final double borderRadius;
+  final Color textColor;
+  final bool isActive;
 
   const LiquidGlassButton({
     super.key,
@@ -33,6 +35,8 @@ class LiquidGlassButton extends StatelessWidget {
     this.width = 200.0,
     this.height = 60.0,
     this.borderRadius = 16.0,
+    this.textColor = Colors.white,
+    this.isActive = true,
   });
 
   @override
@@ -78,10 +82,10 @@ class LiquidGlassButton extends StatelessWidget {
             child: Center(
               child: Text(
                 text,
-                style: const TextStyle(
-                  color: Colors.white,
+                style: TextStyle(
+                  color: textColor,
                   fontSize: 18,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: isActive? FontWeight.bold : FontWeight.normal,
                   letterSpacing: 1.2,
                 ),
               ),

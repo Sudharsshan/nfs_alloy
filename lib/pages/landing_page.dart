@@ -177,7 +177,7 @@ class LandingPageState extends State<LandingPage> {
             right: 15,
             top: 15,
             child: CustomDropDownMenu(
-              childWidget: LiquidGlassButton(text: 'Socials'),
+              childWidget: LiquidGlassButton(text: 'Socials', isActive: true,),
             ),
           ),
         ],
