@@ -18,7 +18,8 @@ class LandingPage extends StatefulWidget {
   State<LandingPage> createState() => LandingPageState();
 }
 
-class LandingPageState extends State<LandingPage> {
+class LandingPageState extends State<LandingPage>
+    with SingleTickerProviderStateMixin {
   final ScrollController scrollController = ScrollController();
   final ValueNotifier<bool> showGames = ValueNotifier(false);
 
@@ -96,8 +97,6 @@ class LandingPageState extends State<LandingPage> {
   @override
   Widget build(BuildContext context) {
     double revealTextSize = MediaQuery.sizeOf(context).width * 0.14;
-
-    if (kDebugMode) print('Scroll position= $scrollPosition');
     return MouseRegion(
       onHover: (event) {
         setState(() {
@@ -146,7 +145,6 @@ class LandingPageState extends State<LandingPage> {
                 scrollController: scrollController,
                 category: selectedGame,
               ),
-
               // Bottom credits or extras
               SliverToBoxAdapter(
                 child: Credits(revealTextSize: revealTextSize),

@@ -1,11 +1,8 @@
 // a page to view wallpapers
 
-import 'dart:math';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:nfs_alloy/models/tile_span.dart';
 import 'package:nfs_alloy/misllaneous/tile_weights.dart';
 import 'package:nfs_alloy/models/wallpaper_loader.dart';
 import 'package:nfs_alloy/misllaneous/sanity_service.dart';
@@ -38,6 +35,7 @@ class WallpaperState extends State<Wallpapers>
   bool _hasMore = true; // Stop trying if we ran out of images
   int _currentCount = 0;
   final int _chunkSize = 15; // How many to load at a time
+  late AnimationController animationController;
 
   @override
   void initState() {
@@ -124,7 +122,7 @@ class WallpaperState extends State<Wallpapers>
         // The images grid
         SliverPadding(
           padding: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
-          sliver: AnimationLimiter(child: tiles()),
+          sliver: tiles(),
         ),
 
         // The loading icon spinner
@@ -166,8 +164,8 @@ class WallpaperState extends State<Wallpapers>
           position: index,
           duration: const Duration(milliseconds: 500),
           columnCount: columnCount,
-          child: ScaleAnimation(
-            child: FadeInAnimation(child: imgTileWithGesture(img, heroTag)),
+          child: FadeInAnimation(
+            child: imgTileWithGesture(img, heroTag),
           ),
         );
       },
@@ -191,13 +189,16 @@ class WallpaperState extends State<Wallpapers>
     // url to load full resolution image
     //final String fullResUrl = img.imageUrl;
 
-    return CachedNetworkImage(
-      memCacheWidth: w,
-      fit: BoxFit.fitWidth,
-      imageUrl: thumbnailUrl,
-      errorWidget: (context, url, error) => Center(child: Icon(Icons.error)),
-      placeholder: (context, url) =>
-          Center(child: CircularProgressIndicator.adaptive(strokeWidth: 2.0)),
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 500),
+      child: CachedNetworkImage(
+        memCacheWidth: w,
+        fit: BoxFit.fitWidth,
+        imageUrl: thumbnailUrl,
+        errorWidget: (context, url, error) => Center(child: Icon(Icons.error)),
+        placeholder: (context, url) =>
+            Center(child: CircularProgressIndicator.adaptive(strokeWidth: 2.0)),
+      ),
     );
   }
 }
