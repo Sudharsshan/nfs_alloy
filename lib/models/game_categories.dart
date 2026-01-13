@@ -15,12 +15,12 @@ class GameCategories {
 
     final Map<String, String> gameNames = {
     'All': 'other',
-    'nfs-2015' : 'NFS 2015',
-    'nfs-heat' : 'NFS Heat',
+    'nfs-2015' : 'Need For Speed 2015',
+    'nfs-heat' : 'Need For Speed Heat',
     'rdr2' : 'Red Dead Redemption 2',
     'cyberpunk' : 'Cuberpunk 2077',
-    'nfs-rivals' : 'NFS Rivals',
-    'nfs-unbound' : 'NFS Unbound',
+    'nfs-rivals' : 'Need For Speed Rivals',
+    'nfs-unbound' : 'Need For Speed Unbound',
     'fh4' : 'Forza Horizon 4',
     'fh5' : 'Forza Horizon 5',
     'torque-drift' : 'Torque Drift',

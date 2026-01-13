@@ -20,6 +20,7 @@ class LandingPage extends StatefulWidget {
 
 class LandingPageState extends State<LandingPage> {
   final ScrollController scrollController = ScrollController();
+  final ValueNotifier<bool> showGames = ValueNotifier(false);
 
   final GlobalKey wallpapersKey = GlobalKey();
 
@@ -34,6 +35,8 @@ class LandingPageState extends State<LandingPage> {
   List<String> activeCategories = ['All'];
 
   Offset cursorPosition = Offset.zero;
+
+  double scrollPosition = 0;
 
   void loadCategories() async {
     if (kDebugMode) print('Fetching categories');
@@ -53,7 +56,9 @@ class LandingPageState extends State<LandingPage> {
     final physicalWidth = view.physicalSize.width;
 
     int targetWidth = physicalWidth.round();
-    String? url = await SanityService().fetchRandomBackgroundImage(targetWidth: targetWidth);
+    String? url = await SanityService().fetchRandomBackgroundImage(
+      targetWidth: targetWidth,
+    );
 
     if (mounted) {
       setState(() {
@@ -72,11 +77,27 @@ class LandingPageState extends State<LandingPage> {
 
     // load a random background image i.e. fetch it's Url to display as background
     loadRandomBackground();
+
+    scrollController.addListener(() {
+      final shouldShow = scrollController.position.pixels > 0;
+
+      if (showGames.value != shouldShow) {
+        showGames.value = shouldShow;
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     double revealTextSize = MediaQuery.sizeOf(context).width * 0.14;
+
+    if (kDebugMode) print('Scroll position= $scrollPosition');
     return MouseRegion(
       onHover: (event) {
         setState(() {
@@ -134,17 +155,27 @@ class LandingPageState extends State<LandingPage> {
           ),
 
           // Menu buttons to show game names
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              GameSelector(
-                context: context,
-                scrollController: scrollController,
-                selectedGame: selectedGame,
-                activeCategories: activeCategories,
-                updateUIfunc: updateUI,
-              ),
-            ],
+          ValueListenableBuilder(
+            valueListenable: showGames,
+            builder: (context, visible, child) {
+              return AnimatedOpacity(
+                opacity: visible ? 1 : 0,
+                duration: const Duration(milliseconds: 200),
+                child: child,
+              );
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                GameSelector(
+                  context: context,
+                  scrollController: scrollController,
+                  selectedGame: selectedGame,
+                  activeCategories: activeCategories,
+                  updateUIfunc: updateUI,
+                ),
+              ],
+            ),
           ),
 
           // Socials button
@@ -152,7 +183,7 @@ class LandingPageState extends State<LandingPage> {
             right: 15,
             top: 15,
             child: CustomDropDownMenu(
-              childWidget: LiquidGlassButton(text: 'Socials', isActive: true,),
+              childWidget: LiquidGlassButton(text: 'Socials', isActive: true),
             ),
           ),
         ],

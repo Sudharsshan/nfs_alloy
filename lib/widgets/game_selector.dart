@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nfs_alloy/models/game_categories.dart';
 import 'package:nfs_alloy/widgets/liquid_glass_button.dart';
 
 class GameSelector extends StatefulWidget {
@@ -23,18 +24,7 @@ class GameSelector extends StatefulWidget {
 
 class GameSelectorState extends State<GameSelector> {
   // Map of Disply Name -> Sanity Value
-  final Map<String, String> gameCategories = {
-    'All': 'other',
-    'NFS 2015': 'nfs-2015',
-    'NFS Heat': 'nfs-heat',
-    'RDR 2': 'rdr2',
-    'Cyberpunk': 'cyberpunk',
-    'Elden Ring': 'elden-ring',
-    'Forza 4': 'fh4',
-    'Forza 5': 'fh5',
-    'Torque Drift': 'toqrue-drift',
-    'NFS Rivals': 'nfs-rivals',
-  };
+  final Map<String, String> gameCategories = GameCategories().gameCategories;
 
   @override
   Widget build(BuildContext context) {

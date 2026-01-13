@@ -1,7 +1,6 @@
 import 'dart:ui' as ui;
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nfs_alloy/misllaneous/image_downloader.dart';
@@ -15,8 +14,7 @@ class ImagePopUp {
 
   ImagePopUp({required this.context, required this.img, required this.heroTag});
 
-  final Map <String, String>gameNames = GameCategories().gameNames;
-
+  final Map<String, String> gameNames = GameCategories().gameNames;
 
   void imagePopUp() {
     final String imgUrl = img.imageUrl;
@@ -62,86 +60,98 @@ class ImagePopUp {
                   ),
 
                   // Name and description of the image
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Game name
-                      Text(
-                        gameName,
-                        style: GoogleFonts.gugi(
-                          fontSize: 45,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          decoration: TextDecoration.none,
-                        ),
-                      ),
-                      // Img ame
-                      Text(
-                        name,
-                        style: GoogleFonts.alata(
-                          fontSize: 35,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          decoration: TextDecoration.none,
-                        ),
-                      ),
-
-                      // Description
-                      Text(
-                        description,
-                        style: GoogleFonts.aladin(
-                          fontSize: 30,
-                          fontWeight: FontWeight.w200,
-                          color: Colors.grey,
-                          decoration: TextDecoration.none,
-                        ),
-                      ),
-
-                      // some spacing
-                      const SizedBox(height: 45),
-
-                      // download button
-                      GestureDetector(
-                        onTap: () {
-                          final rawUrl = getRawSanityUrl(imgUrl);
-                          Imagedownloader().downloadImage(rawUrl, name);
-                        },
-                        child: Container(
-                          padding: EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Color.fromARGB(150, 255, 255, 255),
-                            ),
-                            borderRadius: BorderRadius.circular(12),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Game name
+                        Text(
+                          gameName,
+                          //overflow: TextOverflow.ellipsis,
+                          softWrap: true,
+                          style: TextStyle(
+                            fontSize: 33,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.white,
+                            decoration: TextDecoration.none,
                           ),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.download,
-                                color: const Color.fromARGB(255, 255, 255, 255),
-                                size: 20,
+                        ),
+                        // Img ame
+                        Text(
+                          name,
+                          //overflow: TextOverflow.ellipsis,
+                          softWrap: true,
+                          style: TextStyle(
+                            fontSize: 27,
+                            color: Colors.white,
+                            decoration: TextDecoration.none,
+                          ),
+                        ),
+
+                        // Description
+                        Text(
+                          description,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 23,
+                            fontWeight: FontWeight.w200,
+                            color: Colors.grey,
+                            decoration: TextDecoration.none,
+                          ),
+                        ),
+
+                        // some spacing
+                        const SizedBox(height: 45),
+
+                        // download button
+                        GestureDetector(
+                          onTap: () {
+                            final rawUrl = getRawSanityUrl(imgUrl);
+                            Imagedownloader().downloadImage(rawUrl, name);
+                          },
+                          child: Container(
+                            width: 120,
+                            padding: EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Color.fromARGB(150, 255, 255, 255),
                               ),
-
-                              SizedBox(width: 8),
-
-                              Text(
-                                'Download',
-                                style: TextStyle(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.download,
                                   color: const Color.fromARGB(
                                     255,
                                     255,
                                     255,
                                     255,
                                   ),
-                                  fontSize: 16,
+                                  size: 20,
                                 ),
-                              ),
-                            ],
+
+                                SizedBox(width: 8),
+
+                                Text(
+                                  'Download',
+                                  style: TextStyle(
+                                    color: const Color.fromARGB(
+                                      255,
+                                      255,
+                                      255,
+                                      255,
+                                    ),
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ],
               ),
