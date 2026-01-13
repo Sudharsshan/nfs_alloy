@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:nfs_alloy/misllaneous/url_launcher.dart';
-import 'package:nfs_alloy/widgets/liquid_glass_menu_item.dart';
 
 class CustomDropDownMenu extends StatelessWidget {
   final Widget childWidget;
@@ -35,48 +34,50 @@ class CustomDropDownMenu extends StatelessWidget {
       itemBuilder: (context) => [
         PopupMenuItem(
           value: 1,
-          height: 58,
+          height: 30,
           padding: EdgeInsets.zero,
-          child: LiquidGlassMenuItem(
-            title: 'Instagram',
-            icon: FontAwesomeIcons.instagram,
-          ),
+          child: menuItem('Instagram', FontAwesomeIcons.instagram),
         ),
 
         PopupMenuItem(
           value: 2,
-          height: 58,
+          height: 30,
           padding: EdgeInsets.zero,
-          child: LiquidGlassMenuItem(
-            title: 'Youtube',
-            icon: FontAwesomeIcons.youtube,
-          ),
+          child: menuItem('Youtube', FontAwesomeIcons.youtube),
         ),
       ],
       popUpAnimationStyle: AnimationStyle(
-        curve: Curves.easeInCirc,
-        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeOutCubic,
+        duration: const Duration(milliseconds: 450),
       ),
-      offset: Offset(-15, 60),
+      offset: Offset(-15, 38),
       shadowColor: Colors.transparent,
       color: Colors.transparent,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      elevation: 0,
       child: childWidget,
     );
   }
 
-  Widget menuChild(String id, Icon menuIcon) {
+  Widget menuItem(String content, IconData icon) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        // menu option icon
-        Icon(menuIcon.icon),
-
-        // some space
-        const SizedBox(width: 10),
-
-        // Menu option text
-        Text(id),
+        Icon(icon, color: Colors.white),
+        SizedBox(width: 8),
+        Text(
+          content,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 25,
+            fontWeight: FontWeight.w100,
+            shadows: [
+              Shadow(offset: Offset(1, 1), color: Color.fromARGB(160, 0, 0, 0)),
+              Shadow(
+                offset: Offset(2, 2),
+                color: Color.fromARGB(120, 255, 255, 255),
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }

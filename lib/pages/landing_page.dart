@@ -8,7 +8,6 @@ import 'package:nfs_alloy/pages/wallpapers.dart';
 import 'package:nfs_alloy/widgets/credits.dart';
 import 'package:nfs_alloy/widgets/custom_drop_down_menu.dart';
 import 'package:nfs_alloy/widgets/game_selector.dart';
-import 'package:nfs_alloy/widgets/liquid_glass_button.dart';
 import 'package:nfs_alloy/widgets/reveal_text.dart';
 
 class LandingPage extends StatefulWidget {
@@ -191,7 +190,34 @@ class LandingPageState extends State<LandingPage>
             right: 15,
             top: 15,
             child: CustomDropDownMenu(
-              childWidget: LiquidGlassButton(text: 'Socials', isActive: true),
+              childWidget: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Icon(Icons.person, color: Colors.white),
+                    SizedBox(width: 8),
+                    Text(
+                      'Socials',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 25,
+                        fontWeight: FontWeight.w100,
+                        shadows: [
+                          Shadow(
+                            offset: Offset(1, 1),
+                            color: Color.fromARGB(160, 0, 0, 0),
+                          ),
+                          Shadow(
+                            offset: Offset(2, 2),
+                            color: Color.fromARGB(120, 255, 255, 255),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
         ],
