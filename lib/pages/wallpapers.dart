@@ -143,11 +143,21 @@ class WallpaperState extends State<Wallpapers>
   }
 
   Widget tiles() {
+    final screenWidth = MediaQuery.sizeOf(context).width;
+    int columnCount;
+    if (screenWidth > 1200) {
+      columnCount = 4;
+    } else if (screenWidth < 1200 && screenWidth > 960) {
+      columnCount = 3;
+    } else {
+      columnCount = 2;
+    }
+
     return SliverMasonryGrid.count(
       // main & cross axis spacing
       mainAxisSpacing: 4,
       crossAxisSpacing: 4,
-      crossAxisCount: (MediaQuery.sizeOf(context).width < 1200) ? 3 : 4,
+      crossAxisCount: columnCount,
 
       // display images
       childCount: _wallpapers.length,
@@ -157,16 +167,11 @@ class WallpaperState extends State<Wallpapers>
         // handle on tap to load a pop-up of full image
         final String heroTag = '${img.imageUrl}_$index';
 
-        final screenWidth = MediaQuery.sizeOf(context).width;
-        final columnCount = screenWidth < 1200 ? 3 : 4;
-
         return AnimationConfiguration.staggeredGrid(
           position: index,
           duration: const Duration(milliseconds: 500),
           columnCount: columnCount,
-          child: FadeInAnimation(
-            child: imgTileWithGesture(img, heroTag),
-          ),
+          child: FadeInAnimation(child: imgTileWithGesture(img, heroTag)),
         );
       },
     );
