@@ -17,7 +17,7 @@ class CustomDropDownMenu extends StatelessWidget {
             // Launch INSTAGRAM page
             if (kDebugMode) debugPrint('Launching Instagram page.'),
             UrlLauncher(
-              url: 'https://www.instagram.com/chrxme.png/',
+              url: 'https://www.instagram.com/ripjvw/',
               context: context,
             ).launchUrl(),
           }
@@ -34,14 +34,14 @@ class CustomDropDownMenu extends StatelessWidget {
       itemBuilder: (context) => [
         PopupMenuItem(
           value: 1,
-          height: 30,
+          height: 35,
           padding: EdgeInsets.zero,
           child: menuItem('Instagram', FontAwesomeIcons.instagram),
         ),
 
         PopupMenuItem(
           value: 2,
-          height: 30,
+          height: 35,
           padding: EdgeInsets.zero,
           child: menuItem('Youtube', FontAwesomeIcons.youtube),
         ),
