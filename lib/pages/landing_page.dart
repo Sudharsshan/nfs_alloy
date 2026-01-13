@@ -111,13 +111,23 @@ class LandingPageState extends State<LandingPage>
           Positioned.fill(child: backgroundBuilder()),
 
           // 2. Frosted blur overlay with dynamic clear hole (between background and content)
-          BackdropFilter(
-            filter: ui.ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-            child: Container(
-              color: Colors.white.withAlpha(
-                (0.15 * 255).ceil(),
-              ), // Glassmorphic tint
-              child: CustomPaint(painter: SpotlightPainter(cursorPosition)),
+          ValueListenableBuilder(
+            valueListenable: showGames,
+            builder: (context, visible, child) {
+              return AnimatedOpacity(
+                opacity: visible ? 1 : 0,
+                duration: const Duration(milliseconds: 150),
+                child: child,
+              );
+            },
+            child: BackdropFilter(
+              filter: ui.ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+              child: Container(
+                color: Colors.white.withAlpha(
+                  (0.15 * 255).ceil(),
+                ), // Glassmorphic tint
+                child: CustomPaint(painter: SpotlightPainter(cursorPosition)),
+              ),
             ),
           ),
 
