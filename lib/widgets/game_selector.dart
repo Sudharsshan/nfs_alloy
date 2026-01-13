@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:nfs_alloy/models/game_categories.dart';
-import 'package:nfs_alloy/widgets/liquid_glass_button.dart';
 
 class GameSelector extends StatefulWidget {
   final List<String> activeCategories;
@@ -60,7 +59,7 @@ class GameSelectorState extends State<GameSelector> {
             },
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 12, vertical: 20),
-              child: gameIDChips(isSelected, name),
+              child: Center(child: gameIDChips(isSelected, name),),
             ),
           );
         },
@@ -69,10 +68,20 @@ class GameSelectorState extends State<GameSelector> {
   }
 
   Widget gameIDChips(bool activeButton, String gameName) {
-    return LiquidGlassButton(
-      text: gameName,
-      textColor: activeButton ? Colors.black : Colors.white,
-      isActive: activeButton,
+    return Text(
+      gameName,
+      style: TextStyle(
+        fontWeight: activeButton ? FontWeight.bold : FontWeight.w100,
+        fontSize: activeButton? 32 : 22,
+        shadows: [
+          Shadow(offset: Offset(1, 1), color: Color.fromARGB(160, 0, 0, 0)),
+          Shadow(
+            offset: Offset(2, 2),
+            color: Color.fromARGB(120, 255, 255, 255),
+          ),
+        ],
+        color: Colors.white,
+      ),
     );
   }
 }
