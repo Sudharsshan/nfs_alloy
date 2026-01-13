@@ -1,8 +1,12 @@
 // a page to view wallpapers
 
+import 'dart:math';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:nfs_alloy/models/tile_span.dart';
+import 'package:nfs_alloy/misllaneous/tile_weights.dart';
 import 'package:nfs_alloy/models/wallpaper_loader.dart';
 import 'package:nfs_alloy/misllaneous/sanity_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -14,7 +18,11 @@ class Wallpapers extends StatefulWidget {
   final ScrollController scrollController;
   final String category;
 
-  const Wallpapers({super.key, required this.scrollController, required this.category});
+  const Wallpapers({
+    super.key,
+    required this.scrollController,
+    required this.category,
+  });
 
   @override
   WallpaperState createState() => WallpaperState();
@@ -31,22 +39,37 @@ class WallpaperState extends State<Wallpapers>
   int _currentCount = 0;
   final int _chunkSize = 15; // How many to load at a time
 
+  late final List<QuiltedGridTile> quiltPattern;
+
+  final editorialBlocks = [
+    // Hero left
+    [TileSpan(3, 2), TileSpan(1, 1), TileSpan(1, 1)],
+
+    // Hero right
+    [TileSpan(1, 1), TileSpan(1, 1), TileSpan(3, 2)],
+
+    // Mosaic
+    [TileSpan(2, 2), TileSpan(1, 1), TileSpan(1, 1)],
+  ];
+
+  final quiltPattern3 = [
+    // Row 1
+    QuiltedGridTile(2, 2),
+    QuiltedGridTile(1, 1),
+
+    // Row 2 continuation
+    QuiltedGridTile(1, 1),
+  ];
+
+  final quiltPattern4 = const [QuiltedGridTile(2, 3), QuiltedGridTile(2, 1)];
+
   @override
   void initState() {
     super.initState();
 
-    // controller = AnimationController(
-    //   vsync: this,
-    //   duration: const Duration(milliseconds: 1200),
-    // );
-
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   controller.forward();
-    // });
-
-    // load the images once
-    // wallpaperLoader = SanityService().fetchGalleryImages();
     fetchMoreImages();
+
+    quiltPattern = generatePattern(20);
 
     // listen to parent scroll behaviour
     widget.scrollController.addListener(onScroll);
@@ -105,6 +128,20 @@ class WallpaperState extends State<Wallpapers>
         _isLoading = false;
       });
     }
+
+    // load tile sizes
+    generateTileSizes(_currentCount);
+  }
+
+  double heightMultiplier(TileSize size) {
+    switch (size) {
+      case TileSize.large:
+        return 1.8;
+      case TileSize.medium:
+        return 1.3;
+      case TileSize.small:
+        return 1.0;
+    }
   }
 
   @override
@@ -115,34 +152,7 @@ class WallpaperState extends State<Wallpapers>
         // The images grid
         SliverPadding(
           padding: EdgeInsets.symmetric(horizontal: 16, vertical: 5),
-          sliver: AnimationLimiter(
-            child: SliverMasonryGrid.count(
-              // main & cross axis spacing
-              mainAxisSpacing: 4,
-              crossAxisSpacing: 4,
-              crossAxisCount: (MediaQuery.sizeOf(context).width < 1200) ? 3 : 4,
-
-              // display images
-              childCount: _wallpapers.length,
-              itemBuilder: (context, index) {
-                Wallpaperloader img = _wallpapers[index];
-
-                // handle on tap to load a pop-up of full image
-                final String heroTag = '${img.imageUrl}_$index';
-
-                return AnimationConfiguration.staggeredGrid(
-                  position: index,
-                  duration: const Duration(milliseconds: 500),
-                  columnCount: columnCount,
-                  child: ScaleAnimation(
-                    child: FadeInAnimation(
-                      child: imgTileWithGesture(img, heroTag),
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
+          sliver: AnimationLimiter(child: quiltedGridTiles(columnCount)),
         ),
 
         // The loading icon spinner
@@ -159,6 +169,89 @@ class WallpaperState extends State<Wallpapers>
               : SizedBox.shrink(),
         ),
       ],
+    );
+  }
+
+  Widget quiltedGridTiles(int columnCount) {
+    return SliverGrid(
+      delegate: SliverChildBuilderDelegate((context, index) {
+        final img = _wallpapers[index];
+        final heroTag = '${img.imageUrl}_$index';
+        return AnimationConfiguration.staggeredGrid(
+          position: index,
+          duration: const Duration(milliseconds: 500),
+          columnCount: columnCount,
+          child: ScaleAnimation(
+            child: FadeInAnimation(child: imgTileWithGesture(img, heroTag)),
+          ),
+        );
+      }, childCount: _wallpapers.length),
+      gridDelegate: SliverQuiltedGridDelegate(
+        crossAxisCount: columnCount,
+        pattern: getQuiltPattern(columnCount),
+        mainAxisSpacing: 4,
+        crossAxisSpacing: 4,
+        repeatPattern: QuiltedGridRepeatPattern.inverted,
+      ),
+    );
+  }
+
+  List<QuiltedGridTile> generatePattern(int blocks) {
+    final rand = Random(42);
+    final pattern = <QuiltedGridTile>[];
+
+    for (int i = 0; i < blocks; i++) {
+      final block = editorialBlocks[rand.nextInt(editorialBlocks.length)];
+      for (final tile in block) {
+        pattern.add(QuiltedGridTile(tile.row, tile.col));
+      }
+    }
+    return pattern;
+  }
+
+  List<QuiltedGridTile> getQuiltPattern(int columnCount) {
+    if (columnCount == 3) return quiltPattern3;
+    return quiltPattern4;
+  }
+
+  Widget tiles() {
+    return SliverMasonryGrid.count(
+      // main & cross axis spacing
+      mainAxisSpacing: 4,
+      crossAxisSpacing: 4,
+      crossAxisCount: (MediaQuery.sizeOf(context).width < 1200) ? 3 : 4,
+
+      // display images
+      childCount: _wallpapers.length,
+      itemBuilder: (context, index) {
+        Wallpaperloader img = _wallpapers[index];
+
+        // handle on tap to load a pop-up of full image
+        final String heroTag = '${img.imageUrl}_$index';
+
+        final screenWidth = MediaQuery.sizeOf(context).width;
+        final columnCount = screenWidth < 1200 ? 3 : 4;
+        final columnWidth = (screenWidth - (columnCount - 1) * 4) / columnCount;
+
+        final size = tileSizes[index] ?? TileSize.small;
+        final height = columnWidth * heightMultiplier(size);
+
+        if (kDebugMode) print('$index image height = $height');
+
+        return AnimationConfiguration.staggeredGrid(
+          position: index,
+          duration: const Duration(milliseconds: 500),
+          columnCount: columnCount,
+          child: ScaleAnimation(
+            child: FadeInAnimation(
+              child: SizedBox(
+                height: height,
+                child: imgTileWithGesture(img, heroTag),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 

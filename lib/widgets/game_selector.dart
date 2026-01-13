@@ -102,4 +102,9 @@ class GameSelectorState extends State<GameSelector> {
       isActive: activeButton,
     );
   }
+
+  String currentGame(){
+
+    return '';
+  }
 }
