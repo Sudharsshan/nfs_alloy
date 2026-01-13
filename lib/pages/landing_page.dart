@@ -229,10 +229,7 @@ class LandingPageState extends State<LandingPage>
           padding: EdgeInsetsGeometry.fromLTRB(16, 0, 0, 16),
           child: MouseRegion(
             cursor: SystemMouseCursors.click,
-            child: GestureDetector(
-              onTap: () => scrollControl(),
-              child: RevealText(text: 'Wallpapers', fontSize: textSize),
-            ),
+            child: RevealText(text: 'Wallpapers', fontSize: textSize),
           ),
         ),
       ],

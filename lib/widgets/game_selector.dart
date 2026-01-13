@@ -40,7 +40,6 @@ class GameSelectorState extends State<GameSelector> {
 
   Widget gameSelector() {
     String selectedGame = widget.selectedGame;
-    ScrollController scrollController = widget.scrollController;
     if (widget.activeCategories.length <= 1) return SizedBox.shrink();
 
     return SizedBox(
@@ -58,22 +57,6 @@ class GameSelectorState extends State<GameSelector> {
           return GestureDetector(
             onTap: () {
               widget.updateUIfunc(value);
-
-              double galleryStart = MediaQuery.sizeOf(context).height;
-
-              if (scrollController.hasClients) {
-                scrollController.animateTo(
-                  galleryStart,
-                  duration: const Duration(milliseconds: 500),
-                  curve: Curves.easeOut,
-                );
-
-                scrollController.animateTo(
-                  MediaQuery.sizeOf(context).height,
-                  duration: const Duration(milliseconds: 500),
-                  curve: Curves.easeOut,
-                );
-              }
             },
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 12, vertical: 20),
