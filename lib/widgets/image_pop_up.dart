@@ -1,9 +1,11 @@
 import 'dart:ui' as ui;
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:nfs_alloy/misllaneous/image_downloader.dart';
+import 'package:nfs_alloy/models/game_categories.dart';
 import 'package:nfs_alloy/models/wallpaper_loader.dart';
 
 class ImagePopUp {
@@ -13,10 +15,14 @@ class ImagePopUp {
 
   ImagePopUp({required this.context, required this.img, required this.heroTag});
 
+  final Map <String, String>gameNames = GameCategories().gameNames;
+
+
   void imagePopUp() {
     final String imgUrl = img.imageUrl;
     final String name = img.title;
     final String description = img.description;
+    final String gameName = gameNames[img.gameCategory]!;
     showGeneralDialog(
       context: context,
       barrierDismissible: true,
@@ -60,11 +66,21 @@ class ImagePopUp {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Name
+                      // Game name
+                      Text(
+                        gameName,
+                        style: GoogleFonts.gugi(
+                          fontSize: 45,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          decoration: TextDecoration.none,
+                        ),
+                      ),
+                      // Img ame
                       Text(
                         name,
                         style: GoogleFonts.alata(
-                          fontSize: 45,
+                          fontSize: 35,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
                           decoration: TextDecoration.none,
@@ -87,7 +103,7 @@ class ImagePopUp {
 
                       // download button
                       GestureDetector(
-                        onTap: (){
+                        onTap: () {
                           final rawUrl = getRawSanityUrl(imgUrl);
                           Imagedownloader().downloadImage(rawUrl, name);
                         },
@@ -136,7 +152,7 @@ class ImagePopUp {
     );
   }
 
-  String getRawSanityUrl(String url){
+  String getRawSanityUrl(String url) {
     // Split by ? to remove all processing params
     final Uri uri = Uri.parse(url);
 
