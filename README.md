@@ -1,6 +1,11 @@
 # CHR-X-ME.png
 ---
-A custom flutter based website designed from scratch to provide wallpapers.
+Fully customized wallpaper website made from scratch as per RipJVw's wishes.
+
+## Features
+---
+- Image display at full resolution
+- Image download function
 
 ## Backend
 ---
