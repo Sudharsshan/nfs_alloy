@@ -15,7 +15,7 @@ class RevealTextState extends State<RevealText>
 
   // Animation duration CHANGE IF NEEDED HERE
   Duration animationDuration = const Duration(seconds: 3);
-  Duration revealDuration = const Duration(milliseconds: 100);
+  Duration revealDuration = const Duration(milliseconds: 500);
   Duration pauseDuration = const Duration(seconds: 1);
 
   @override
