@@ -6,6 +6,7 @@ import 'package:nfs_alloy/misllaneous/sanity_service.dart';
 import 'package:nfs_alloy/misllaneous/spotlight_painter.dart';
 import 'package:nfs_alloy/pages/wallpapers.dart';
 import 'package:nfs_alloy/widgets/credits.dart';
+import 'package:nfs_alloy/widgets/custom_app_bar.dart';
 import 'package:nfs_alloy/widgets/custom_drop_down_menu.dart';
 import 'package:nfs_alloy/widgets/game_selector.dart';
 import 'package:nfs_alloy/widgets/reveal_text.dart';
@@ -22,10 +23,6 @@ class LandingPageState extends State<LandingPage>
   final ScrollController scrollController = ScrollController();
   final ValueNotifier<bool> showGames = ValueNotifier(false);
 
-  final GlobalKey wallpapersKey = GlobalKey();
-
-  int fontWidth = 124;
-  bool mouseHover = false;
 
   String selectedGame = 'All';
   String? backgroundImageUrl;
@@ -95,7 +92,9 @@ class LandingPageState extends State<LandingPage>
 
   @override
   Widget build(BuildContext context) {
-    double revealTextSize = MediaQuery.sizeOf(context).width * 0.14;
+    double width =  MediaQuery.sizeOf(context).width;
+    double height =  MediaQuery.sizeOf(context).height;
+    double revealTextSize = width * 0.14;
     return MouseRegion(
       onHover: (event) {
         setState(() {
@@ -142,7 +141,7 @@ class LandingPageState extends State<LandingPage>
                     scrollControl();
                   },
                   child: SizedBox(
-                    height: MediaQuery.sizeOf(context).height,
+                    height:  height,
                     child: wallpaperButton(revealTextSize),
                   ),
                 ),
@@ -161,65 +160,14 @@ class LandingPageState extends State<LandingPage>
             ],
           ),
 
-          // Menu buttons to show game names
-          ValueListenableBuilder(
-            valueListenable: showGames,
-            builder: (context, visible, child) {
-              return AnimatedOpacity(
-                opacity: visible ? 1 : 0,
-                duration: const Duration(milliseconds: 200),
-                child: child,
-              );
-            },
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                GameSelector(
-                  context: context,
-                  scrollController: scrollController,
-                  selectedGame: selectedGame,
-                  activeCategories: activeCategories,
-                  updateUIfunc: updateUI,
-                ),
-              ],
-            ),
-          ),
-
-          // Socials button
-          Positioned(
-            right: 15,
-            top: 15,
-            child: CustomDropDownMenu(
-              childWidget: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Icon(Icons.person, color: Colors.white),
-                    SizedBox(width: 8),
-                    Text(
-                      'Socials',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 25,
-                        fontWeight: FontWeight.w100,
-                        shadows: [
-                          Shadow(
-                            offset: Offset(1, 1),
-                            color: Color.fromARGB(160, 0, 0, 0),
-                          ),
-                          Shadow(
-                            offset: Offset(2, 2),
-                            color: Color.fromARGB(120, 255, 255, 255),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
+          // custom app bar for showing games and about section
+          CustomAppBar(
+            showGames: showGames,
+            activeCategories: activeCategories,
+            scrollController: scrollController,
+            selectedGame: selectedGame,
+            updateUI: updateUI,
+          )
         ],
       ),
     );
@@ -243,17 +191,17 @@ class LandingPageState extends State<LandingPage>
         loadingBuilder: (context, child, loadingProgress) {
           if (loadingProgress == null) return child;
           // while the image is loading show a placeHolder image
-          return Image.asset('lib/assets/bg.png', fit: BoxFit.cover);
+          return const SizedBox.shrink();
         },
         errorBuilder: (context, child, stackTrace) {
           // If no internet or cannot laod image, display the same placeHolder image
-          return Image.asset('lib/assets/bg.png', fit: BoxFit.cover);
+          return const SizedBox.shrink();
         },
       );
     }
 
     // If nothing worked, then fall back to local image indicates failure to connect with Sanity.IO
-    return Image.asset('lib/assets/bg.png', fit: BoxFit.cover);
+    return const SizedBox.shrink();
   }
 
   Widget wallpaperButton(double textSize) {
