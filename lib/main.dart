@@ -8,22 +8,14 @@ void main() {
   runApp(const MainApp());
 }
 
-class MainApp extends StatefulWidget {
+class MainApp extends StatelessWidget {
   const MainApp({super.key});
-
-  @override
-  State<MainApp> createState() => MainAppState();
-}
-
-class MainAppState extends State<MainApp> {
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: LandingPage(),
-      ),
+      home: Scaffold(body: LandingPage()),
     );
   }
 }
