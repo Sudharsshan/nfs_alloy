@@ -8,6 +8,9 @@ A premium wallpaper discovery and download platform built with Flutter Web, feat
 
 ---
 
+## Live preview
+
+> Visit the website live at: [Vercel Deployment](https://nfs-alloy.vercel.app)
 ## 📖 Overview
 
 NFS Alloy is a modern wallpaper gallery designed to showcase high-resolution wallpapers through an immersive and visually appealing user experience.
