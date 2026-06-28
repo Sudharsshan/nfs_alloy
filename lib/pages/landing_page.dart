@@ -7,8 +7,6 @@ import 'package:nfs_alloy/misllaneous/spotlight_painter.dart';
 import 'package:nfs_alloy/pages/wallpapers.dart';
 import 'package:nfs_alloy/widgets/credits.dart';
 import 'package:nfs_alloy/widgets/custom_app_bar.dart';
-import 'package:nfs_alloy/widgets/custom_drop_down_menu.dart';
-import 'package:nfs_alloy/widgets/game_selector.dart';
 import 'package:nfs_alloy/widgets/reveal_text.dart';
 
 class LandingPage extends StatefulWidget {
